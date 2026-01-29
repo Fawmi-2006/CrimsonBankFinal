@@ -319,8 +319,10 @@ public class AccountController {
             Customer customer = customerDAO.getById(customerId);
             if (customer != null) {
                 String name = customer.getFullName();
-                customerNameCache.put(customerId, name);
-                return name;
+                if (name != null && !name.trim().isEmpty()) {
+                    customerNameCache.put(customerId, name);
+                    return name;
+                }
             }
         } catch (DatabaseException e) {
             showError("Failed to load customer name: " + e.getMessage());

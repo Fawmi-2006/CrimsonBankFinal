@@ -158,7 +158,8 @@ public class TransactionDAO {
             transaction.setRelatedAccountId(relatedId);
         }
 
-        transaction.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        Timestamp createdTs = rs.getTimestamp("created_at");
+        transaction.setCreatedAt(createdTs != null ? createdTs.toLocalDateTime() : null);
         return transaction;
     }
 

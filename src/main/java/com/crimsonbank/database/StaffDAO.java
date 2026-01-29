@@ -119,8 +119,10 @@ public class StaffDAO {
         staff.setFullName(rs.getString("full_name"));
         staff.setRole(rs.getString("role"));
         staff.setActive(rs.getBoolean("is_active"));
-        staff.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        staff.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+        Timestamp createdTs = rs.getTimestamp("created_at");
+        staff.setCreatedAt(createdTs != null ? createdTs.toLocalDateTime() : null);
+        Timestamp updatedTs = rs.getTimestamp("updated_at");
+        staff.setUpdatedAt(updatedTs != null ? updatedTs.toLocalDateTime() : null);
         return staff;
     }
 

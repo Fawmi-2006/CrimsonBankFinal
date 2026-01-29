@@ -70,6 +70,10 @@ public class TransactionController {
 
     @FXML
     private void handleDeposit() {
+        if (transactionService == null) {
+            showError("Transaction service not initialized.");
+            return;
+        }
         Account account = accountCombo.getValue();
         if (account == null) {
             showError("Select an account first.");
@@ -90,6 +94,10 @@ public class TransactionController {
 
     @FXML
     private void handleWithdraw() {
+        if (transactionService == null) {
+            showError("Transaction service not initialized.");
+            return;
+        }
         Account account = accountCombo.getValue();
         if (account == null) {
             showError("Select an account first.");
@@ -110,6 +118,10 @@ public class TransactionController {
 
     @FXML
     private void handleTransfer() {
+        if (transactionService == null) {
+            showError("Transaction service not initialized.");
+            return;
+        }
         Account account = accountCombo.getValue();
         if (account == null) {
             showError("Select an account first.");
@@ -167,6 +179,14 @@ public class TransactionController {
 
             @Override
             public Account fromString(String string) {
+                if (string == null || string.isEmpty()) {
+                    return null;
+                }
+                for (Account account : accountCombo.getItems()) {
+                    if (account.getAccountNumber().equals(string)) {
+                        return account;
+                    }
+                }
                 return null;
             }
         });

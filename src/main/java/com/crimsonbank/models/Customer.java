@@ -22,7 +22,7 @@ public class Customer {
     }
 
     public Customer(String firstName, String lastName, String nic, String email, String phoneNumber,
-                   String address, String city, String postalCode, LocalDate dateOfBirth) {
+                    String address, String city, String postalCode, LocalDate dateOfBirth) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nic = nic;
@@ -131,7 +131,26 @@ public class Customer {
     }
 
     public String getFullName() {
-        return firstName + " " + lastName;
+        String first = firstName != null ? firstName : "";
+        String last = lastName != null ? lastName : "";
+        return (first + " " + last).trim();
     }
 
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerId=" + customerId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", nic='" + nic + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

@@ -175,8 +175,10 @@ public class AccountDAO {
         account.setAccountType(rs.getString("account_type"));
         account.setBalance(rs.getBigDecimal("balance"));
         account.setStatus(rs.getString("status"));
-        account.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        account.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+        Timestamp createdTs = rs.getTimestamp("created_at");
+        account.setCreatedAt(createdTs != null ? createdTs.toLocalDateTime() : null);
+        Timestamp updatedTs = rs.getTimestamp("updated_at");
+        account.setUpdatedAt(updatedTs != null ? updatedTs.toLocalDateTime() : null);
         return account;
     }
 

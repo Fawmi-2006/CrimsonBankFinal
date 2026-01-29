@@ -171,9 +171,12 @@ public class CustomerDAO {
         customer.setAddress(rs.getString("address"));
         customer.setCity(rs.getString("city"));
         customer.setPostalCode(rs.getString("postal_code"));
-        customer.setDateOfBirth(rs.getDate("date_of_birth").toLocalDate());
-        customer.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        customer.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+        java.sql.Date dobDate = rs.getDate("date_of_birth");
+        customer.setDateOfBirth(dobDate != null ? dobDate.toLocalDate() : null);
+        Timestamp createdTs = rs.getTimestamp("created_at");
+        customer.setCreatedAt(createdTs != null ? createdTs.toLocalDateTime() : null);
+        Timestamp updatedTs = rs.getTimestamp("updated_at");
+        customer.setUpdatedAt(updatedTs != null ? updatedTs.toLocalDateTime() : null);
         return customer;
     }
 

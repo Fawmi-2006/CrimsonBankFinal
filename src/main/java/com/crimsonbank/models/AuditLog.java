@@ -95,4 +95,19 @@ public class AuditLog {
         this.createdAt = createdAt;
     }
 
+    @Override
+    public String toString() {
+        return "AuditLog{" +
+                "logId=" + logId +
+                ", action='" + action + '\'' +
+                ", description='" + description + '\'' +
+                ", staffId=" + staffId +
+                ", customerId=" + customerId +
+                ", accountId=" + accountId +
+                ", transactionId=" + transactionId +
+                ", loanId=" + loanId +
+                ", createdAt=" + createdAt +
+                '}';
+    }
+
 }

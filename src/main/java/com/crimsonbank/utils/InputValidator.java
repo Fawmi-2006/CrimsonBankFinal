@@ -26,7 +26,11 @@ public class InputValidator {
     }
 
     public static boolean isValidPhoneNumber(String phone) {
-        return phone != null && phone.matches("^\\+?94\\d{9}$|^0\\d{9}$");
+        if (phone == null) {
+            return false;
+        }
+        String cleaned = phone.replaceAll("[\\s\\-\\(\\)]", "");
+        return cleaned.matches("^(\\+?94|0)\\d{9}$");
     }
 
     public static boolean isValidAccountNumber(String accountNumber) {

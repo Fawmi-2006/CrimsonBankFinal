@@ -126,4 +126,21 @@ public class Loan {
         return "APPROVED".equals(status);
     }
 
+    @Override
+    public String toString() {
+        return "Loan{" +
+                "loanId=" + loanId +
+                ", customerId=" + customerId +
+                ", accountId=" + accountId +
+                ", loanAmount=" + loanAmount +
+                ", interestRate=" + interestRate +
+                ", tenureMonths=" + tenureMonths +
+                ", status='" + status + '\'' +
+                ", approvedBy=" + approvedBy +
+                ", approvalDate=" + approvalDate +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
+
 }

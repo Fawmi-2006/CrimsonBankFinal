@@ -189,8 +189,10 @@ public class LoanDAO {
             loan.setApprovalDate(approvalDate.toLocalDateTime());
         }
 
-        loan.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-        loan.setUpdatedAt(rs.getTimestamp("updated_at").toLocalDateTime());
+        Timestamp createdTs = rs.getTimestamp("created_at");
+        loan.setCreatedAt(createdTs != null ? createdTs.toLocalDateTime() : null);
+        Timestamp updatedTs = rs.getTimestamp("updated_at");
+        loan.setUpdatedAt(updatedTs != null ? updatedTs.toLocalDateTime() : null);
         return loan;
     }
 

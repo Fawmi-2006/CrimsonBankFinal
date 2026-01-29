@@ -194,7 +194,8 @@ public class AuditLogDAO {
             log.setLoanId(loanId);
         }
 
-        log.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
+        Timestamp createdTs = rs.getTimestamp("created_at");
+        log.setCreatedAt(createdTs != null ? createdTs.toLocalDateTime() : null);
         return log;
     }
 

@@ -98,4 +98,18 @@ public class StaffMember {
         isActive = active;
     }
 
+    @Override
+    public String toString() {
+        return "StaffMember{" +
+                "staffId=" + staffId +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", role='" + role + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", isActive=" + isActive +
+                '}';
+    }
+
 }
