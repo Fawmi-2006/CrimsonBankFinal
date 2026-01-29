@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" alignment="TOP_CENTER" style="-fx-padding: 30px; -fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="com.crimsonbank.controllers.SignupController">
+    <VBox spacing="20" style="-fx-background-color: white; -fx-padding: 30px; -fx-border-radius: 10; -fx-max-width: 400;">
+        <Label text="Create Staff Account" styleClass="label-heading" style="-fx-font-size: 24; -fx-text-fill: #1e3a5f;"/>
+        <Separator/>
+
+        <VBox spacing="8">
+            <Label text="Full Name" styleClass="label"/>
+            <TextField fx:id="fullNameField" promptText="Enter full name" style="-fx-font-size: 12;"/>
+        </VBox>
+
+        <VBox spacing="8">
+            <Label text="Email" styleClass="label"/>
+            <TextField fx:id="emailField" promptText="Enter email address" style="-fx-font-size: 12;"/>
+        </VBox>
+
+        <VBox spacing="8">
+            <Label text="Username" styleClass="label"/>
+            <TextField fx:id="usernameField" promptText="Enter username" style="-fx-font-size: 12;"/>
+        </VBox>
+
+        <VBox spacing="8">
+            <Label text="Password (minimum 6 characters)" styleClass="label"/>
+            <PasswordField fx:id="passwordField" promptText="Enter password" style="-fx-font-size: 12;"/>
+        </VBox>
+
+        <VBox spacing="8">
+            <Label text="Role" styleClass="label"/>
+            <ComboBox fx:id="roleCombo" promptText="Select role" style="-fx-font-size: 12;"/>
+        </VBox>
+
+        <Button fx:id="signupButton" text="Create Account" styleClass="button-primary" style="-fx-font-size: 13; -fx-padding: 10px;" minWidth="150"/>
+
+        <Label fx:id="messageLabel" text="" style="-fx-text-fill: #c0392b; -fx-font-size: 11;"/>
+
+        <Hyperlink text="Back to Login" fx:id="backLink" style="-fx-font-size: 11;"/>
+    </VBox>
+</VBox>

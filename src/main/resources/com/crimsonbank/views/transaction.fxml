@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.crimsonbank.controllers.TransactionController">
+
+    <top>
+        <VBox style="-fx-background-color: #1e3a5f; -fx-padding: 15px;">
+            <HBox alignment="CENTER_LEFT" spacing="20">
+                <Button fx:id="backButton"
+                        text="Back"
+                        onAction="#handleBackToDashboard"
+                        style="-fx-padding: 8px 15px;"/>
+                <Label text="Transactions"
+                       style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+            </HBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="20" style="-fx-padding: 20px;">
+            <HBox spacing="10">
+                <ComboBox fx:id="accountCombo"
+                          promptText="Select Account"
+                          prefWidth="200"/>
+                <Button text="Deposit"
+                        onAction="#handleDeposit"
+                        styleClass="button-success"
+                        style="-fx-padding: 8px 15px;"/>
+                <Button text="Withdraw"
+                        onAction="#handleWithdraw"
+                        styleClass="button-warning"
+                        style="-fx-padding: 8px 15px;"/>
+                <Button text="Transfer"
+                        onAction="#handleTransfer"
+                        styleClass="button-primary"
+                        style="-fx-padding: 8px 15px;"/>
+            </HBox>
+
+            <TableView fx:id="transactionTable" prefHeight="400">
+                <columns>
+                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
+                    <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
+                    <TableColumn fx:id="amountColumn" text="Amount" prefWidth="120"/>
+                    <TableColumn fx:id="balanceColumn" text="Balance" prefWidth="120"/>
+                    <TableColumn fx:id="descriptionColumn" text="Description" prefWidth="300"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" alignment="CENTER" style="-fx-padding: 50px; -fx-background-color: linear-gradient(to bottom, #1e3a5f, #2d5a8f);" xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml" fx:controller="com.crimsonbank.controllers.LoginController">
+    <VBox spacing="20" alignment="CENTER" style="-fx-background-color: white; -fx-padding: 40px; -fx-border-radius: 10;">
+        <Label text="CrimsonBank" styleClass="label-heading" style="-fx-font-size: 32; -fx-text-fill: #1e3a5f;"/>
+        <Label text="Banking Management System" styleClass="label-subheading" style="-fx-font-size: 14; -fx-text-fill: #666;"/>
+
+        <Separator/>
+
+        <VBox spacing="10">
+            <Label text="Username" styleClass="label"/>
+            <TextField fx:id="usernameField" promptText="Enter your username" style="-fx-font-size: 13;"/>
+        </VBox>
+
+        <VBox spacing="10">
+            <Label text="Password" styleClass="label"/>
+            <PasswordField fx:id="passwordField" promptText="Enter your password" style="-fx-font-size: 13;"/>
+        </VBox>
+
+        <Button fx:id="loginButton" text="Login" styleClass="button-primary" style="-fx-font-size: 14; -fx-padding: 12px 30px;" minWidth="200"/>
+
+        <Separator/>
+
+        <VBox spacing="10" alignment="CENTER">
+            <Label text="New staff member?" styleClass="label-small"/>
+            <Hyperlink text="Sign up here" fx:id="signupLink"/>
+        </VBox>
+
+        <Label fx:id="errorLabel" text="" style="-fx-text-fill: #c0392b; -fx-font-size: 11;"/>
+    </VBox>
+</VBox>
