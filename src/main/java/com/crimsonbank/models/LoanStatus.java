@@ -1,8 +1,5 @@
 package com.crimsonbank.models;
 
-/**
- * Enumeration for loan status values
- */
 public enum LoanStatus {
     PENDING("PENDING"),
     APPROVED("APPROVED"),

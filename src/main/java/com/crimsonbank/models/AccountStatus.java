@@ -1,8 +1,5 @@
 package com.crimsonbank.models;
 
-/**
- * Enumeration for account status values
- */
 public enum AccountStatus {
     ACTIVE("ACTIVE"),
     INACTIVE("INACTIVE"),

@@ -1,8 +1,5 @@
 package com.crimsonbank.models;
 
-/**
- * Enumeration for transaction type values
- */
 public enum TransactionType {
     DEPOSIT("DEPOSIT"),
     WITHDRAWAL("WITHDRAWAL"),
