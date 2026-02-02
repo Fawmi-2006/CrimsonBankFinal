@@ -127,7 +127,6 @@ public class LoanDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
-                // Log the loan approval
                 AuditLog auditLog = new AuditLog(
                     "LOAN_APPROVED",
                     "Loan approved - Loan ID: " + loanId,
@@ -156,7 +155,6 @@ public class LoanDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
-                // Log the loan rejection
                 AuditLog auditLog = new AuditLog(
                     "LOAN_REJECTED",
                     "Loan rejected - Loan ID: " + loanId,

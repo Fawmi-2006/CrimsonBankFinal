@@ -33,7 +33,6 @@ public class AccountDAO {
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 int accountId = rs.getInt(1);
-                // Log the account creation
                 AuditLog auditLog = new AuditLog(
                     "ACCOUNT_CREATED",
                     "Account created - Account ID: " + accountId + ", Account Number: " + account.getAccountNumber() + ", Type: " + account.getAccountType() + ", Customer ID: " + account.getCustomerId(),
@@ -141,7 +140,6 @@ public class AccountDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
-                // Log the account update
                 AuditLog auditLog = new AuditLog(
                     "ACCOUNT_UPDATED",
                     "Account updated - Account ID: " + account.getAccountId() + ", Type: " + account.getAccountType() + ", Status: " + account.getStatus(),
@@ -186,7 +184,6 @@ public class AccountDAO {
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                // Log the account deletion
                 AuditLog auditLog = new AuditLog(
                     "ACCOUNT_DELETED",
                     "Account deleted - Account ID: " + accountId,

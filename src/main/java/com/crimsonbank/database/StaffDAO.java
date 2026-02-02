@@ -102,7 +102,6 @@ public class StaffDAO {
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, staff.getEmail());
-            // Hash the password before updating
             stmt.setString(2, PasswordUtil.hashPassword(staff.getPassword()));
             stmt.setString(3, staff.getFullName());
             stmt.setString(4, staff.getRole());

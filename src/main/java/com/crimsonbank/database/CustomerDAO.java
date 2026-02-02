@@ -38,7 +38,6 @@ public class CustomerDAO {
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 int customerId = rs.getInt(1);
-                // Log the customer creation
                 AuditLog auditLog = new AuditLog(
                     "CUSTOMER_CREATED",
                     "Customer created - Customer ID: " + customerId + ", Name: " + customer.getFullName() + ", NIC: " + customer.getNic(),
@@ -152,7 +151,6 @@ public class CustomerDAO {
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
-                // Log the customer update
                 AuditLog auditLog = new AuditLog(
                     "CUSTOMER_UPDATED",
                     "Customer updated - Customer ID: " + customer.getCustomerId() + ", Name: " + customer.getFullName() + ", Email: " + customer.getEmail(),
@@ -180,7 +178,6 @@ public class CustomerDAO {
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                // Log the customer deletion
                 AuditLog auditLog = new AuditLog(
                     "CUSTOMER_DELETED",
                     "Customer deleted - Customer ID: " + customerId,

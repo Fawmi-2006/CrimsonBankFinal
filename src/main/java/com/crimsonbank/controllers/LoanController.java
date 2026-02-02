@@ -133,11 +133,9 @@ public class LoanController {
             private final HBox container = new HBox(8, approveButton, rejectButton);
 
             {
-                // Set button styles
                 approveButton.setStyle("-fx-background-color: #28a745; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-cursor: hand;");
                 rejectButton.setStyle("-fx-background-color: #dc3545; -fx-text-fill: white; -fx-padding: 5px 15px; -fx-cursor: hand;");
 
-                // Set button min widths
                 approveButton.setMinWidth(70);
                 rejectButton.setMinWidth(65);
 

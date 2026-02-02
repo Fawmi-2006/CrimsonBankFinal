@@ -55,7 +55,6 @@ public class LoginController {
             StaffDAO staffDAO = new StaffDAO();
 
             if (staffDAO.authenticate(username, password)) {
-                // Get the full staff member details and store in session
                 StaffMember staff = staffDAO.getByUsername(username);
                 if (staff != null) {
                     SessionManager.getInstance().setCurrentUser(

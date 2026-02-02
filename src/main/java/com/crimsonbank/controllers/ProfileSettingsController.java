@@ -107,22 +107,17 @@ public class ProfileSettingsController {
 
         if (selectedFile != null) {
             try {
-                // Create profiles directory if it doesn't exist
                 String profilesDir = "profiles";
                 Files.createDirectories(Paths.get(profilesDir));
 
-                // Copy file to profiles directory
                 String fileName = username + "_" + System.currentTimeMillis() + getFileExtension(selectedFile);
                 String destPath = profilesDir + File.separator + fileName;
                 Files.copy(selectedFile.toPath(), Paths.get(destPath), StandardCopyOption.REPLACE_EXISTING);
 
-                // Update profile image path
                 profileImagePath = destPath;
 
-                // Update in database
                 updateProfileImageInDatabase(profileImagePath);
 
-                // Update UI
                 displayAvatar();
                 updatePhotoStatus();
 
@@ -161,7 +156,6 @@ public class ProfileSettingsController {
             staff.setProfileImage(imagePath);
             staffDAO.updateStaffProfileImage(staff.getStaffId(), imagePath);
 
-            // Update session
             session.setCurrentUser(
                 session.getCurrentUsername(),
                 session.getCurrentUserFullName(),

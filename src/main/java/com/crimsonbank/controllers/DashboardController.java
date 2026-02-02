@@ -116,7 +116,6 @@ public class DashboardController {
         if (fullName != null && !fullName.isEmpty()) {
             userNameLabel.setText(fullName);
 
-            // Add avatar to user profile pane
             userProfilePane.getChildren().add(0, AvatarUtil.createAvatarWithImage(profileImage, fullName, 50));
         }
     }
@@ -186,7 +185,6 @@ public class DashboardController {
 
     private void handleLogout() {
         try {
-            // Clear session on logout
             SessionManager.getInstance().clearSession();
 
             FXMLLoader loader = new FXMLLoader();
@@ -233,7 +231,6 @@ public class DashboardController {
             controller.setStage(stage);
             stage.showAndWait();
 
-            // Refresh dashboard after settings close
             refreshDashboard();
 
         } catch (Exception e) {

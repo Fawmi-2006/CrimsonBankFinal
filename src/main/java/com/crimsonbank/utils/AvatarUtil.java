@@ -17,14 +17,14 @@ public class AvatarUtil {
 
     private static final int DEFAULT_AVATAR_SIZE = 40;
     private static final int[] AVATAR_COLORS = {
-            0x3B82F6, // Blue
-            0x10B981, // Emerald
-            0xF59E0B, // Amber
-            0xEF4444, // Red
-            0x8B5CF6, // Violet
-            0xEC4899, // Pink
-            0x14B8A6, // Teal
-            0xF97316  // Orange
+            0x3B82F6,
+            0x10B981,
+            0xF59E0B,
+            0xEF4444,
+            0x8B5CF6,
+            0xEC4899,
+            0x14B8A6,
+            0xF97316
     };
 
     /**
@@ -125,7 +125,6 @@ public class AvatarUtil {
                 System.err.println("Error loading image: " + e.getMessage());
             }
         }
-        // Fallback to letter avatar if image is not available
         return createAvatarWithName(name, size);
     }
 
