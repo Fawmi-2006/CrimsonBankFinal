@@ -2,61 +2,76 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.crimsonbank.controllers.LoanController">
 
     <top>
-        <VBox style="-fx-background-color: #1e3a5f; -fx-padding: 15px;">
+        <VBox style="-fx-background-color: linear-gradient(to right, #0055cc, #0066ee); -fx-padding: 20px;">
             <HBox alignment="CENTER_LEFT" spacing="20">
                 <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#handleBackToDashboard"
-                        style="-fx-padding: 8px 15px;"/>
+                        text="← Back"
+                        onAction="#handleBackToDashboard"/>
                 <Label text="Loan Management"
-                       style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                       styleClass="label-heading"
+                       style="-fx-font-size: 22; -fx-font-weight: 800; -fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <VBox spacing="20" style="-fx-padding: 20px;">
-            <HBox spacing="10">
-                <Button fx:id="newLoanButton" text="New Loan Request"
-                        onAction="#handleNewLoan"
-                        styleClass="button-success"
-                        style="-fx-padding: 8px 15px;"/>
-            </HBox>
+        <BorderPane>
+            <top>
+                <VBox spacing="15" style="-fx-padding: 20px 20px 10px 20px;">
+                    <HBox spacing="10" style="-fx-min-height: 50px;">
+                        <Button fx:id="newLoanButton" text="📋 New Loan Request"
+                                onAction="#handleNewLoan"
+                                styleClass="button-success"
+                                style="-fx-padding: 10px 20px;"/>
+                    </HBox>
+                </VBox>
+            </top>
 
-            <TabPane>
-                <Tab text="Pending Loans" closable="false">
-                    <TableView fx:id="pendingLoansTable" prefHeight="300">
-                        <columns>
-                            <TableColumn fx:id="pendingIdColumn" text="Loan ID" prefWidth="80"/>
-                            <TableColumn fx:id="pendingCustomerColumn" text="Customer" prefWidth="150"/>
-                            <TableColumn fx:id="pendingAmountColumn" text="Amount" prefWidth="120"/>
-                            <TableColumn fx:id="pendingRateColumn" text="Interest Rate" prefWidth="100"/>
-                            <TableColumn fx:id="pendingTenureColumn" text="Tenure (Months)" prefWidth="120"/>
-                            <TableColumn fx:id="pendingStatusColumn" text="Status" prefWidth="100"/>
-                            <TableColumn fx:id="pendingActionsColumn" text="Actions" prefWidth="170"/>
-                        </columns>
-                    </TableView>
-                </Tab>
+            <center>
+                <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-padding: 0px 20px 20px 20px;">
+                    <Tab text="Pending Loans" closable="false">
+                        <BorderPane>
+                            <center>
+                                <TableView fx:id="pendingLoansTable" styleClass="table-view">
+                                    <columns>
+                                        <TableColumn fx:id="pendingIdColumn" text="Loan ID" prefWidth="80"/>
+                                        <TableColumn fx:id="pendingCustomerColumn" text="Customer" prefWidth="150"/>
+                                        <TableColumn fx:id="pendingAmountColumn" text="Amount" prefWidth="120"/>
+                                        <TableColumn fx:id="pendingRateColumn" text="Interest Rate" prefWidth="100"/>
+                                        <TableColumn fx:id="pendingTenureColumn" text="Tenure (Months)" prefWidth="120"/>
+                                        <TableColumn fx:id="pendingStatusColumn" text="Status" prefWidth="100"/>
+                                        <TableColumn fx:id="pendingActionsColumn" text="Actions" prefWidth="170"/>
+                                    </columns>
+                                </TableView>
+                            </center>
+                        </BorderPane>
+                    </Tab>
 
-                <Tab text="Approved Loans" closable="false">
-                    <TableView fx:id="approvedLoansTable" prefHeight="300">
-                        <columns>
-                            <TableColumn fx:id="approvedIdColumn" text="Loan ID" prefWidth="80"/>
-                            <TableColumn fx:id="approvedCustomerColumn" text="Customer" prefWidth="150"/>
-                            <TableColumn fx:id="approvedAmountColumn" text="Amount" prefWidth="120"/>
-                            <TableColumn fx:id="approvedByColumn" text="Approved By" prefWidth="150"/>
-                            <TableColumn fx:id="approvedDateColumn" text="Date" prefWidth="120"/>
-                        </columns>
-                    </TableView>
-                </Tab>
-            </TabPane>
-        </VBox>
+                    <Tab text="Approved Loans" closable="false">
+                        <BorderPane>
+                            <center>
+                                <TableView fx:id="approvedLoansTable" styleClass="table-view">
+                                    <columns>
+                                        <TableColumn fx:id="approvedIdColumn" text="Loan ID" prefWidth="80"/>
+                                        <TableColumn fx:id="approvedCustomerColumn" text="Customer" prefWidth="150"/>
+                                        <TableColumn fx:id="approvedAmountColumn" text="Amount" prefWidth="120"/>
+                                        <TableColumn fx:id="approvedByColumn" text="Approved By" prefWidth="150"/>
+                                        <TableColumn fx:id="approvedDateColumn" text="Date" prefWidth="120"/>
+                                    </columns>
+                                </TableView>
+                            </center>
+                        </BorderPane>
+                    </Tab>
+                </TabPane>
+            </center>
+        </BorderPane>
     </center>
 
 </BorderPane>

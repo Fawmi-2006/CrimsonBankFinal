@@ -8,39 +8,40 @@
             fx:controller="com.crimsonbank.controllers.TransactionController">
 
     <top>
-        <VBox style="-fx-background-color: #1e3a5f; -fx-padding: 15px;">
+        <VBox style="-fx-background-color: linear-gradient(to right, #0055cc, #0066ee); -fx-padding: 20px;">
             <HBox alignment="CENTER_LEFT" spacing="20">
                 <Button fx:id="backButton"
-                        text="Back"
+                        text="← Back"
                         onAction="#handleBackToDashboard"
                         style="-fx-padding: 8px 15px;"/>
                 <Label text="Transactions"
-                       style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                       style="-fx-font-size: 22; -fx-font-weight: 800; -fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <VBox spacing="20" style="-fx-padding: 20px;">
-            <HBox spacing="10">
+        <VBox spacing="20" style="-fx-padding: 30px;">
+            <HBox spacing="12">
                 <ComboBox fx:id="accountCombo"
                           promptText="Select Account"
-                          prefWidth="200"/>
-                <Button text="Deposit"
+                          prefWidth="200"
+                          styleClass="combo-box"/>
+                <Button text="💳 Deposit"
                         onAction="#handleDeposit"
                         styleClass="button-success"
-                        style="-fx-padding: 8px 15px;"/>
-                <Button text="Withdraw"
+                        style="-fx-padding: 11px 18px;"/>
+                <Button text="💸 Withdraw"
                         onAction="#handleWithdraw"
                         styleClass="button-warning"
-                        style="-fx-padding: 8px 15px;"/>
-                <Button text="Transfer"
+                        style="-fx-padding: 11px 18px;"/>
+                <Button text="🔄 Transfer"
                         onAction="#handleTransfer"
                         styleClass="button-primary"
-                        style="-fx-padding: 8px 15px;"/>
+                        style="-fx-padding: 11px 18px;"/>
             </HBox>
 
-            <TableView fx:id="transactionTable" prefHeight="400">
+            <TableView fx:id="transactionTable" prefHeight="400" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
                     <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>

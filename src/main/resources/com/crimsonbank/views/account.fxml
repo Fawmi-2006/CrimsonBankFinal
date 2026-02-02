@@ -8,27 +8,27 @@
             fx:controller="com.crimsonbank.controllers.AccountController">
 
     <top>
-        <VBox style="-fx-background-color: #1e3a5f; -fx-padding: 15px;">
+        <VBox style="-fx-background-color: linear-gradient(to right, #0055cc, #0066ee); -fx-padding: 20px;">
             <HBox alignment="CENTER_LEFT" spacing="20">
                 <Button fx:id="backButton"
-                        text="Back"
+                        text="← Back"
                         onAction="#handleBackToDashboard"
                         style="-fx-padding: 8px 15px;"/>
                 <Label text="Account Management"
-                       style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                       style="-fx-font-size: 22; -fx-font-weight: 800; -fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <VBox spacing="20" style="-fx-padding: 20px;">
-            <HBox spacing="10">
-                <TextField fx:id="searchField" promptText="Search account" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="searchButton" text="Search" onAction="#handleSearch" styleClass="button-primary"/>
-                <Button fx:id="createButton" text="Create" onAction="#handleCreate" styleClass="button-success"/>
+        <VBox spacing="20" style="-fx-padding: 30px;">
+            <HBox spacing="12">
+                <TextField fx:id="searchField" promptText="Search account" HBox.hgrow="ALWAYS" styleClass="text-field"/>
+                <Button fx:id="searchButton" text="🔍 Search" onAction="#handleSearch" styleClass="button-primary"/>
+                <Button fx:id="createButton" text="➕ Create" onAction="#handleCreate" styleClass="button-success"/>
             </HBox>
 
-            <TableView fx:id="accountTable" prefHeight="400">
+            <TableView fx:id="accountTable" prefHeight="400" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="idColumn" text="Account ID" prefWidth="100"/>
                     <TableColumn fx:id="numberColumn" text="Account Number" prefWidth="150"/>
@@ -36,7 +36,7 @@
                     <TableColumn fx:id="typeColumn" text="Type" prefWidth="100"/>
                     <TableColumn fx:id="balanceColumn" text="Balance" prefWidth="120"/>
                     <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
-                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="140"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="220"/>
                 </columns>
             </TableView>
         </VBox>

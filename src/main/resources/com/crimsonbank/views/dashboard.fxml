@@ -9,60 +9,60 @@
             fx:controller="com.crimsonbank.controllers.DashboardController">
 
     <top>
-        <VBox style="-fx-background-color: #1e3a5f; -fx-padding: 15px;">
+        <VBox style="-fx-background-color: linear-gradient(to right, #0055cc, #0066ee); -fx-padding: 20px;">
             <HBox alignment="CENTER_LEFT" spacing="20">
                 <Label text="CrimsonBank Dashboard"
-                       style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                       style="-fx-font-size: 22; -fx-font-weight: 800; -fx-text-fill: white;"/>
                 <Region HBox.hgrow="ALWAYS"/>
                 <Button fx:id="logoutButton"
                         text="Logout"
                         styleClass="button-danger"
-                        style="-fx-padding: 8px 15px;"/>
+                        style="-fx-padding: 8px 20px;"/>
             </HBox>
         </VBox>
     </top>
 
     <left>
-        <VBox spacing="10"
-              style="-fx-background-color: #f5f5f5; -fx-padding: 20px; -fx-border-color: #ddd; -fx-border-width: 0 1 0 0; -fx-min-width: 200;"
-              prefWidth="200">
+        <VBox spacing="12"
+              style="-fx-background-color: #f1f5f9; -fx-padding: 20px; -fx-border-color: #e2e8f0; -fx-border-width: 0 1 0 0; -fx-min-width: 220;"
+              prefWidth="220">
 
             <Label text="Navigation"
-                   style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #1e3a5f;"/>
+                   style="-fx-font-size: 13; -fx-font-weight: 700; -fx-text-fill: #0055cc;"/>
             <Separator/>
 
             <Button fx:id="dashboardBtn"
-                    text="Dashboard"
-                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 10px;"
-                    minWidth="180"/>
+                    text="📊 Dashboard"
+                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 12px 16px; -fx-text-alignment: left;"
+                    minWidth="190"/>
             <Button fx:id="customerBtn"
-                    text="Customers"
-                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 10px;"
-                    minWidth="180"/>
+                    text="👥 Customers"
+                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 12px 16px; -fx-text-alignment: left;"
+                    minWidth="190"/>
             <Button fx:id="accountBtn"
-                    text="Accounts"
-                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 10px;"
-                    minWidth="180"/>
+                    text="🏦 Accounts"
+                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 12px 16px; -fx-text-alignment: left;"
+                    minWidth="190"/>
             <Button fx:id="transactionBtn"
-                    text="Transactions"
-                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 10px;"
-                    minWidth="180"/>
+                    text="💰 Transactions"
+                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 12px 16px; -fx-text-alignment: left;"
+                    minWidth="190"/>
             <Button fx:id="historyBtn"
-                    text="History"
-                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 10px;"
-                    minWidth="180"/>
+                    text="📜 History"
+                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 12px 16px; -fx-text-alignment: left;"
+                    minWidth="190"/>
             <Button fx:id="loanBtn"
-                    text="Loans"
-                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 10px;"
-                    minWidth="180"/>
+                    text="📋 Loans"
+                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 12px 16px; -fx-text-alignment: left;"
+                    minWidth="190"/>
             <Button fx:id="reportBtn"
-                    text="Reports"
-                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 10px;"
-                    minWidth="180"/>
+                    text="📈 Reports"
+                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 12px 16px; -fx-text-alignment: left;"
+                    minWidth="190"/>
             <Button fx:id="auditBtn"
-                    text="Audit Log"
-                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 10px;"
-                    minWidth="180"/>
+                    text="🔐 Audit Log"
+                    style="-fx-alignment: CENTER_LEFT; -fx-padding: 12px 16px; -fx-text-alignment: left;"
+                    minWidth="190"/>
 
             <Region VBox.vgrow="ALWAYS"/>
         </VBox>
@@ -70,78 +70,78 @@
 
     <center>
         <ScrollPane fitToWidth="true" fitToHeight="true">
-            <VBox spacing="20" style="-fx-padding: 30px;">
+            <VBox spacing="24" style="-fx-padding: 30px;">
 
                 <HBox spacing="20">
-                    <VBox spacing="5" styleClass="card" prefWidth="200" prefHeight="120">
+                    <VBox spacing="8" styleClass="card" prefWidth="200" prefHeight="130">
                         <Label text="Total Customers"
-                               styleClass="label-subheading"
-                               style="-fx-font-size: 14;"/>
+                               styleClass="label-small"
+                               style="-fx-text-fill: #64748b;"/>
                         <Label fx:id="totalCustomersLabel"
                                text="0"
-                               style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1e3a5f;"/>
+                               style="-fx-font-size: 32; -fx-font-weight: 800; -fx-text-fill: #0055cc;"/>
                     </VBox>
 
-                    <VBox spacing="5" styleClass="card" prefWidth="200" prefHeight="120">
+                    <VBox spacing="8" styleClass="card" prefWidth="200" prefHeight="130">
                         <Label text="Total Accounts"
-                               styleClass="label-subheading"
-                               style="-fx-font-size: 14;"/>
+                               styleClass="label-small"
+                               style="-fx-text-fill: #64748b;"/>
                         <Label fx:id="totalAccountsLabel"
                                text="0"
-                               style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1e3a5f;"/>
+                               style="-fx-font-size: 32; -fx-font-weight: 800; -fx-text-fill: #10b981;"/>
                     </VBox>
 
-                    <VBox spacing="5" styleClass="card" prefWidth="200" prefHeight="120">
+                    <VBox spacing="8" styleClass="card" prefWidth="200" prefHeight="130">
                         <Label text="Total Transactions"
-                               styleClass="label-subheading"
-                               style="-fx-font-size: 14;"/>
+                               styleClass="label-small"
+                               style="-fx-text-fill: #64748b;"/>
                         <Label fx:id="totalTransactionsLabel"
                                text="0"
-                               style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #1e3a5f;"/>
+                               style="-fx-font-size: 32; -fx-font-weight: 800; -fx-text-fill: #f59e0b;"/>
                     </VBox>
 
-                    <VBox spacing="5" styleClass="card" prefWidth="200" prefHeight="120">
+                    <VBox spacing="8" styleClass="card" prefWidth="200" prefHeight="130">
                         <Label text="Pending Loans"
-                               styleClass="label-subheading"
-                               style="-fx-font-size: 14;"/>
+                               styleClass="label-small"
+                               style="-fx-text-fill: #64748b;"/>
                         <Label fx:id="pendingLoansLabel"
                                text="0"
-                               style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #f39c12;"/>
+                               style="-fx-font-size: 32; -fx-font-weight: 800; -fx-text-fill: #ef4444;"/>
                     </VBox>
                 </HBox>
 
-                <VBox spacing="10" styleClass="card">
-                    <Label text="Quick Actions" styleClass="label-subheading"/>
-                    <HBox spacing="10">
-                        <Button fx:id="quickAddCustomerButton" text="Add Customer"
+                <VBox spacing="14" styleClass="card">
+                    <Label text="Quick Actions" styleClass="label-subheading" style="-fx-text-fill: #1e293b;"/>
+                    <HBox spacing="12">
+                        <Button fx:id="quickAddCustomerButton" text="➕ Add Customer"
                                 onAction="#handleQuickAddCustomer"
                                 styleClass="button-primary"
                                 style="-fx-padding: 10px 20px;"/>
-                        <Button fx:id="quickCreateAccountButton" text="Create Account"
+                        <Button fx:id="quickCreateAccountButton" text="🏪 Create Account"
                                 onAction="#handleQuickCreateAccount"
-                                styleClass="button-primary"
+                                styleClass="button-success"
                                 style="-fx-padding: 10px 20px;"/>
-                        <Button fx:id="quickNewTransactionButton" text="New Transaction"
+                        <Button fx:id="quickNewTransactionButton" text="💳 New Transaction"
                                 onAction="#handleQuickNewTransaction"
                                 styleClass="button-primary"
                                 style="-fx-padding: 10px 20px;"/>
                     </HBox>
                 </VBox>
 
-                <VBox spacing="10" styleClass="card">
-                    <Label text="System Status" styleClass="label-subheading"/>
-                    <HBox spacing="20">
-                        <VBox spacing="5">
-                            <Label text="Database Connection" styleClass="label"/>
+                <VBox spacing="14" styleClass="card">
+                    <Label text="System Status" styleClass="label-subheading" style="-fx-text-fill: #1e293b;"/>
+                    <HBox spacing="24">
+                        <VBox spacing="6">
+                            <Label text="Database Connection" styleClass="label-small"/>
                             <Label fx:id="dbStatusLabel"
                                    text="Connected"
-                                   style="-fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+                                   style="-fx-text-fill: #10b981; -fx-font-weight: 700; -fx-font-size: 13;"/>
                         </VBox>
-                        <VBox spacing="5">
-                            <Label text="Last Updated" styleClass="label"/>
+                        <VBox spacing="6">
+                            <Label text="Last Updated" styleClass="label-small"/>
                             <Label fx:id="lastUpdatedLabel"
                                    text="Just now"
-                                   style="-fx-text-fill: #666;"/>
+                                   style="-fx-text-fill: #64748b; -fx-font-size: 13;"/>
                         </VBox>
                     </HBox>
                 </VBox>

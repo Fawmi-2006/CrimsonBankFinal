@@ -8,35 +8,38 @@
             fx:controller="com.crimsonbank.controllers.AuditController">
 
     <top>
-        <VBox style="-fx-background-color: #1e3a5f; -fx-padding: 15px;">
+        <VBox style="-fx-background-color: linear-gradient(to right, #0055cc, #0066ee); -fx-padding: 20px;">
             <HBox alignment="CENTER_LEFT" spacing="20">
                 <Button fx:id="backButton"
-                        text="Back"
+                        text="← Back"
                         onAction="#handleBackToDashboard"
                         style="-fx-padding: 8px 15px;"/>
                 <Label text="Audit Log"
-                       style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                       style="-fx-font-size: 22; -fx-font-weight: 800; -fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <VBox spacing="20" style="-fx-padding: 20px;">
-            <HBox spacing="10">
+        <VBox spacing="20" style="-fx-padding: 30px;">
+            <HBox spacing="12">
                 <ComboBox fx:id="actionFilterCombo"
                           promptText="Filter by Action"
-                          prefWidth="150"/>
+                          prefWidth="150"
+                          styleClass="combo-box"/>
                 <DatePicker fx:id="fromDatePicker"
-                            promptText="From Date"/>
+                            promptText="From Date"
+                            styleClass="text-field"/>
                 <DatePicker fx:id="toDatePicker"
-                            promptText="To Date"/>
-                <Button fx:id="filterButton" text="Filter"
+                            promptText="To Date"
+                            styleClass="text-field"/>
+                <Button fx:id="filterButton" text="🔍 Filter"
                         onAction="#handleFilter"
                         styleClass="button-primary"
-                        style="-fx-padding: 8px 15px;"/>
+                        style="-fx-padding: 11px 18px;"/>
             </HBox>
 
-            <TableView fx:id="auditTable" prefHeight="400">
+            <TableView fx:id="auditTable" prefHeight="400" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="idColumn" text="Log ID" prefWidth="80"/>
                     <TableColumn fx:id="timestampColumn" text="Timestamp" prefWidth="150"/>

@@ -6,106 +6,128 @@
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.crimsonbank.controllers.ReportController">
 
     <top>
-        <VBox style="-fx-background-color: #1e3a5f; -fx-padding: 15px;">
+        <VBox style="-fx-background-color: linear-gradient(to right, #0055cc, #0066ee); -fx-padding: 20px;">
             <HBox alignment="CENTER_LEFT" spacing="20">
                 <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#handleBackToDashboard"
-                        style="-fx-padding: 8px 15px;"/>
+                        text="← Back"
+                        onAction="#handleBackToDashboard"/>
                 <Label text="Reports &amp; Analytics"
-                       style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                       styleClass="label-heading"
+                       style="-fx-font-size: 22; -fx-font-weight: 800; -fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <VBox spacing="20" style="-fx-padding: 20px;">
-            <TabPane>
+        <BorderPane>
+            <center>
+                <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-padding: 20px 20px 20px 20px;">
 
-                <Tab text="Transaction Analysis" closable="false">
-                    <VBox spacing="15" style="-fx-padding: 15px;">
-                        <HBox spacing="10">
-                            <ComboBox fx:id="transactionTypeCombo"
-                                      promptText="Transaction Type"
-                                      prefWidth="150"/>
-                            <Button fx:id="transactionGenerateButton" text="Generate"
-                                    onAction="#handleGenerateTransactionReport"
-                                    styleClass="button-primary"
-                                    style="-fx-padding: 8px 15px;"/>
-                            <Button fx:id="exportCsvButton" text="Export to CSV"
-                                    onAction="#handleExportCsv"
-                                    styleClass="button-success"
-                                    style="-fx-padding: 8px 15px;"/>
-                        </HBox>
+                    <Tab text="Transaction Analysis" closable="false">
+                        <BorderPane style="-fx-padding: 20px;">
+                            <top>
+                                <HBox spacing="12" style="-fx-min-height: 50px;">
+                                    <ComboBox fx:id="transactionTypeCombo"
+                                              promptText="Transaction Type"
+                                              prefWidth="150"
+                                              styleClass="combo-box"/>
+                                    <Button fx:id="transactionGenerateButton" text="📊 Generate"
+                                            onAction="#handleGenerateTransactionReport"
+                                            styleClass="button-primary"
+                                            style="-fx-padding: 10px 20px;"/>
+                                    <Button fx:id="exportCsvButton" text="📥 Export to CSV"
+                                            onAction="#handleExportCsv"
+                                            styleClass="button-success"
+                                            style="-fx-padding: 10px 20px;"/>
+                                </HBox>
+                            </top>
+                            <center>
+                                <PieChart fx:id="transactionPieChart" style="-fx-padding: 20px;"/>
+                            </center>
+                        </BorderPane>
+                    </Tab>
 
-                        <PieChart fx:id="transactionPieChart" prefHeight="300"/>
-                    </VBox>
-                </Tab>
+                    <Tab text="Monthly Volume" closable="false">
+                        <BorderPane style="-fx-padding: 20px;">
+                            <top>
+                                <HBox spacing="12" style="-fx-min-height: 50px;">
+                                    <Button fx:id="monthlyGenerateButton" text="📈 Generate Report"
+                                            onAction="#handleGenerateMonthlyReport"
+                                            styleClass="button-primary"
+                                            style="-fx-padding: 10px 20px;"/>
+                                </HBox>
+                            </top>
+                            <center>
+                                <BarChart fx:id="monthlyBarChart" style="-fx-padding: 20px;">
+                                    <xAxis>
+                                        <CategoryAxis/>
+                                    </xAxis>
+                                    <yAxis>
+                                        <NumberAxis/>
+                                    </yAxis>
+                                </BarChart>
+                            </center>
+                        </BorderPane>
+                    </Tab>
 
-                <Tab text="Monthly Volume" closable="false">
-                    <VBox spacing="15" style="-fx-padding: 15px;">
-                        <Button fx:id="monthlyGenerateButton" text="Generate Report"
-                                onAction="#handleGenerateMonthlyReport"
-                                styleClass="button-primary"
-                                style="-fx-padding: 8px 15px;"/>
+                    <Tab text="Summary Statistics" closable="false">
+                        <BorderPane style="-fx-padding: 20px;">
+                            <center>
+                                <GridPane hgap="30" vgap="16" style="-fx-padding: 20px;">
+                                    <Label text="Total Transactions:"
+                                           styleClass="label"
+                                           GridPane.columnIndex="0"
+                                           GridPane.rowIndex="0"/>
+                                    <Label fx:id="totalTransLabel"
+                                           text="0"
+                                           style="-fx-font-size: 16; -fx-font-weight: 700; -fx-text-fill: #0055cc;"
+                                           GridPane.columnIndex="1"
+                                           GridPane.rowIndex="0"/>
 
-                        <BarChart fx:id="monthlyBarChart" prefHeight="300">
-                            <xAxis>
-                                <CategoryAxis/>
-                            </xAxis>
-                            <yAxis>
-                                <NumberAxis/>
-                            </yAxis>
-                        </BarChart>
-                    </VBox>
-                </Tab>
+                                    <Label text="Total Volume:"
+                                           styleClass="label"
+                                           GridPane.columnIndex="0"
+                                           GridPane.rowIndex="1"/>
+                                    <Label fx:id="totalVolumeLabel"
+                                           text="0.00"
+                                           style="-fx-font-size: 16; -fx-font-weight: 700; -fx-text-fill: #10b981;"
+                                           GridPane.columnIndex="1"
+                                           GridPane.rowIndex="1"/>
 
-                <Tab text="Summary Statistics" closable="false">
-                    <VBox spacing="10" style="-fx-padding: 15px;">
-                        <GridPane hgap="20" vgap="10">
-                            <Label text="Total Transactions:"
-                                   GridPane.columnIndex="0"
-                                   GridPane.rowIndex="0"/>
-                            <Label fx:id="totalTransLabel"
-                                   text="0"
-                                   GridPane.columnIndex="1"
-                                   GridPane.rowIndex="0"/>
+                                    <Label text="Average Transaction:"
+                                           styleClass="label"
+                                           GridPane.columnIndex="0"
+                                           GridPane.rowIndex="2"/>
+                                    <Label fx:id="avgTransLabel"
+                                           text="0.00"
+                                           style="-fx-font-size: 16; -fx-font-weight: 700; -fx-text-fill: #f59e0b;"
+                                           GridPane.columnIndex="1"
+                                           GridPane.rowIndex="2"/>
 
-                            <Label text="Total Volume:"
-                                   GridPane.columnIndex="0"
-                                   GridPane.rowIndex="1"/>
-                            <Label fx:id="totalVolumeLabel"
-                                   text="0.00"
-                                   GridPane.columnIndex="1"
-                                   GridPane.rowIndex="1"/>
+                                    <Label text="Top Account:"
+                                           styleClass="label"
+                                           GridPane.columnIndex="0"
+                                           GridPane.rowIndex="3"/>
+                                    <Label fx:id="topAccountLabel"
+                                           text="N/A"
+                                           style="-fx-font-size: 16; -fx-font-weight: 700; -fx-text-fill: #6366f1;"
+                                           GridPane.columnIndex="1"
+                                           GridPane.rowIndex="3"/>
+                                </GridPane>
+                            </center>
+                        </BorderPane>
+                    </Tab>
 
-                            <Label text="Average Transaction:"
-                                   GridPane.columnIndex="0"
-                                   GridPane.rowIndex="2"/>
-                            <Label fx:id="avgTransLabel"
-                                   text="0.00"
-                                   GridPane.columnIndex="1"
-                                   GridPane.rowIndex="2"/>
-
-                            <Label text="Top Account:"
-                                   GridPane.columnIndex="0"
-                                   GridPane.rowIndex="3"/>
-                            <Label fx:id="topAccountLabel"
-                                   text="N/A"
-                                   GridPane.columnIndex="1"
-                                   GridPane.rowIndex="3"/>
-                        </GridPane>
-                    </VBox>
-                </Tab>
-
-            </TabPane>
-        </VBox>
+                </TabPane>
+            </center>
+        </BorderPane>
     </center>
 
 </BorderPane>

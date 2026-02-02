@@ -2,41 +2,45 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.crimsonbank.controllers.HistoryController">
 
     <top>
-        <VBox style="-fx-background-color: #1e3a5f; -fx-padding: 15px;">
+        <VBox style="-fx-background-color: linear-gradient(to right, #0055cc, #0066ee); -fx-padding: 20px;">
             <HBox alignment="CENTER_LEFT" spacing="20">
                 <Button fx:id="backButton"
-                        text="Back"
-                        onAction="#handleBackToDashboard"
-                        style="-fx-padding: 8px 15px;"/>
+                        text="← Back"
+                        onAction="#handleBackToDashboard"/>
                 <Label text="Transaction History"
-                       style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: white;"/>
+                       styleClass="label-heading"
+                       style="-fx-font-size: 22; -fx-font-weight: 800; -fx-text-fill: white;"/>
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <VBox spacing="20" style="-fx-padding: 20px;">
-            <HBox spacing="10">
+        <VBox spacing="20" style="-fx-padding: 30px;" VBox.vgrow="ALWAYS">
+            <HBox spacing="12" style="-fx-min-height: 50px;">
                 <ComboBox fx:id="accountCombo"
                           promptText="Select Account"
-                          prefWidth="200"/>
+                          prefWidth="200"
+                          styleClass="combo-box"/>
                 <DatePicker fx:id="fromDate"
-                            promptText="From Date"/>
+                            promptText="From Date"
+                            styleClass="text-field"/>
                 <DatePicker fx:id="toDate"
-                            promptText="To Date"/>
-                <Button fx:id="filterButton" text="Filter"
+                            promptText="To Date"
+                            styleClass="text-field"/>
+                <Button fx:id="filterButton" text="🔍 Filter"
                         onAction="#handleFilter"
                         styleClass="button-primary"
-                        style="-fx-padding: 8px 15px;"/>
+                        style="-fx-padding: 11px 18px;"/>
             </HBox>
 
-            <TableView fx:id="historyTable" prefHeight="400">
+            <TableView fx:id="historyTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="idColumn" text="Transaction ID" prefWidth="100"/>
                     <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
