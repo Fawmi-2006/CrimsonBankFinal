@@ -47,7 +47,7 @@
                                         <TableColumn fx:id="pendingRateColumn" text="Interest Rate" prefWidth="100"/>
                                         <TableColumn fx:id="pendingTenureColumn" text="Tenure (Months)" prefWidth="120"/>
                                         <TableColumn fx:id="pendingStatusColumn" text="Status" prefWidth="100"/>
-                                        <TableColumn fx:id="pendingActionsColumn" text="Actions" prefWidth="170"/>
+                                        <TableColumn fx:id="pendingActionsColumn" text="Actions" prefWidth="200" minWidth="180"/>
                                     </columns>
                                 </TableView>
                             </center>

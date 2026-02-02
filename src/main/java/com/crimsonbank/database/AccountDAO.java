@@ -2,6 +2,7 @@ package com.crimsonbank.database;
 
 import com.crimsonbank.exceptions.DatabaseException;
 import com.crimsonbank.models.Account;
+import com.crimsonbank.models.AuditLog;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -31,7 +32,18 @@ public class AccountDAO {
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                return rs.getInt(1);
+                int accountId = rs.getInt(1);
+                // Log the account creation
+                AuditLog auditLog = new AuditLog(
+                    "ACCOUNT_CREATED",
+                    "Account created - Account ID: " + accountId + ", Account Number: " + account.getAccountNumber() + ", Type: " + account.getAccountType() + ", Customer ID: " + account.getCustomerId(),
+                    null
+                );
+                auditLog.setAccountId(accountId);
+                auditLog.setCustomerId(account.getCustomerId());
+                AuditLogDAO auditLogDAO = new AuditLogDAO();
+                auditLogDAO.createLog(auditLog);
+                return accountId;
             }
 
         } catch (SQLException e) {
@@ -128,7 +140,19 @@ public class AccountDAO {
             stmt.setInt(4, account.getAccountId());
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                // Log the account update
+                AuditLog auditLog = new AuditLog(
+                    "ACCOUNT_UPDATED",
+                    "Account updated - Account ID: " + account.getAccountId() + ", Type: " + account.getAccountType() + ", Status: " + account.getStatus(),
+                    null
+                );
+                auditLog.setAccountId(account.getAccountId());
+                AuditLogDAO auditLogDAO = new AuditLogDAO();
+                auditLogDAO.createLog(auditLog);
+                return true;
+            }
+            return false;
 
         } catch (SQLException e) {
             throw new DatabaseException("Error updating account: " + e.getMessage(), e);
@@ -160,7 +184,20 @@ public class AccountDAO {
 
             stmt.setInt(1, accountId);
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+
+            if (rowsAffected > 0) {
+                // Log the account deletion
+                AuditLog auditLog = new AuditLog(
+                    "ACCOUNT_DELETED",
+                    "Account deleted - Account ID: " + accountId,
+                    null
+                );
+                auditLog.setAccountId(accountId);
+                AuditLogDAO auditLogDAO = new AuditLogDAO();
+                auditLogDAO.createLog(auditLog);
+                return true;
+            }
+            return false;
 
         } catch (SQLException e) {
             throw new DatabaseException("Error deleting account: " + e.getMessage(), e);

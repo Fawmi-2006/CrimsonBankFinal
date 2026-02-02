@@ -1,6 +1,7 @@
 package com.crimsonbank.database;
 
 import com.crimsonbank.exceptions.DatabaseException;
+import com.crimsonbank.models.AuditLog;
 import com.crimsonbank.models.Loan;
 
 import java.sql.*;
@@ -125,7 +126,19 @@ public class LoanDAO {
             stmt.setInt(2, loanId);
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                // Log the loan approval
+                AuditLog auditLog = new AuditLog(
+                    "LOAN_APPROVED",
+                    "Loan approved - Loan ID: " + loanId,
+                    staffId
+                );
+                auditLog.setLoanId(loanId);
+                AuditLogDAO auditLogDAO = new AuditLogDAO();
+                auditLogDAO.createLog(auditLog);
+                return true;
+            }
+            return false;
 
         } catch (SQLException e) {
             throw new DatabaseException("Error approving loan: " + e.getMessage(), e);
@@ -142,7 +155,19 @@ public class LoanDAO {
             stmt.setInt(2, loanId);
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                // Log the loan rejection
+                AuditLog auditLog = new AuditLog(
+                    "LOAN_REJECTED",
+                    "Loan rejected - Loan ID: " + loanId,
+                    staffId
+                );
+                auditLog.setLoanId(loanId);
+                AuditLogDAO auditLogDAO = new AuditLogDAO();
+                auditLogDAO.createLog(auditLog);
+                return true;
+            }
+            return false;
 
         } catch (SQLException e) {
             throw new DatabaseException("Error rejecting loan: " + e.getMessage(), e);

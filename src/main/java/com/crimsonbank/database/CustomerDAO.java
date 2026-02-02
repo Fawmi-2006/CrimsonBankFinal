@@ -1,6 +1,7 @@
 package com.crimsonbank.database;
 
 import com.crimsonbank.exceptions.DatabaseException;
+import com.crimsonbank.models.AuditLog;
 import com.crimsonbank.models.Customer;
 
 import java.sql.*;
@@ -36,7 +37,17 @@ public class CustomerDAO {
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                return rs.getInt(1);
+                int customerId = rs.getInt(1);
+                // Log the customer creation
+                AuditLog auditLog = new AuditLog(
+                    "CUSTOMER_CREATED",
+                    "Customer created - Customer ID: " + customerId + ", Name: " + customer.getFullName() + ", NIC: " + customer.getNic(),
+                    null
+                );
+                auditLog.setCustomerId(customerId);
+                AuditLogDAO auditLogDAO = new AuditLogDAO();
+                auditLogDAO.createLog(auditLog);
+                return customerId;
             }
 
         } catch (SQLException e) {
@@ -140,7 +151,19 @@ public class CustomerDAO {
             stmt.setInt(9, customer.getCustomerId());
 
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            if (rowsAffected > 0) {
+                // Log the customer update
+                AuditLog auditLog = new AuditLog(
+                    "CUSTOMER_UPDATED",
+                    "Customer updated - Customer ID: " + customer.getCustomerId() + ", Name: " + customer.getFullName() + ", Email: " + customer.getEmail(),
+                    null
+                );
+                auditLog.setCustomerId(customer.getCustomerId());
+                AuditLogDAO auditLogDAO = new AuditLogDAO();
+                auditLogDAO.createLog(auditLog);
+                return true;
+            }
+            return false;
 
         } catch (SQLException e) {
             throw new DatabaseException("Error updating customer: " + e.getMessage(), e);
@@ -155,7 +178,20 @@ public class CustomerDAO {
 
             stmt.setInt(1, customerId);
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+
+            if (rowsAffected > 0) {
+                // Log the customer deletion
+                AuditLog auditLog = new AuditLog(
+                    "CUSTOMER_DELETED",
+                    "Customer deleted - Customer ID: " + customerId,
+                    null
+                );
+                auditLog.setCustomerId(customerId);
+                AuditLogDAO auditLogDAO = new AuditLogDAO();
+                auditLogDAO.createLog(auditLog);
+                return true;
+            }
+            return false;
 
         } catch (SQLException e) {
             throw new DatabaseException("Error deleting customer: " + e.getMessage(), e);
