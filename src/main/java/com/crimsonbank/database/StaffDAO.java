@@ -2,6 +2,7 @@ package com.crimsonbank.database;
 
 import com.crimsonbank.exceptions.DatabaseException;
 import com.crimsonbank.models.StaffMember;
+import com.crimsonbank.utils.PasswordUtil;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -15,15 +16,19 @@ public class StaffDAO {
     }
 
     public boolean authenticate(String username, String password) throws DatabaseException {
-        String query = "SELECT * FROM staff WHERE username = ? AND password = ? AND is_active = TRUE";
+        String query = "SELECT password FROM staff WHERE username = ? AND is_active = TRUE";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, username);
-            stmt.setString(2, password);
             ResultSet rs = stmt.executeQuery();
-            return rs.next();
+
+            if (rs.next()) {
+                String hashedPassword = rs.getString("password");
+                return PasswordUtil.verifyPassword(password, hashedPassword);
+            }
+            return false;
 
         } catch (SQLException e) {
             throw new DatabaseException("Authentication failed: " + e.getMessage(), e);
@@ -69,17 +74,18 @@ public class StaffDAO {
     }
 
     public boolean createStaff(StaffMember staff) throws DatabaseException {
-        String query = "INSERT INTO staff (email, username, password, full_name, role, is_active) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO staff (email, username, password, full_name, role, profile_image, is_active) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, staff.getEmail());
             stmt.setString(2, staff.getUsername());
-            stmt.setString(3, staff.getPassword());
+            stmt.setString(3, PasswordUtil.hashPassword(staff.getPassword()));
             stmt.setString(4, staff.getFullName());
             stmt.setString(5, staff.getRole());
-            stmt.setBoolean(6, staff.isActive());
+            stmt.setString(6, staff.getProfileImage());
+            stmt.setBoolean(7, staff.isActive());
 
             stmt.executeUpdate();
             return true;
@@ -90,23 +96,42 @@ public class StaffDAO {
     }
 
     public boolean updateStaff(StaffMember staff) throws DatabaseException {
-        String query = "UPDATE staff SET email = ?, password = ?, full_name = ?, role = ?, is_active = ?, updated_at = NOW() WHERE staff_id = ?";
+        String query = "UPDATE staff SET email = ?, password = ?, full_name = ?, role = ?, profile_image = ?, is_active = ?, updated_at = NOW() WHERE staff_id = ?";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, staff.getEmail());
-            stmt.setString(2, staff.getPassword());
+            // Hash the password before updating
+            stmt.setString(2, PasswordUtil.hashPassword(staff.getPassword()));
             stmt.setString(3, staff.getFullName());
             stmt.setString(4, staff.getRole());
-            stmt.setBoolean(5, staff.isActive());
-            stmt.setInt(6, staff.getStaffId());
+            stmt.setString(5, staff.getProfileImage());
+            stmt.setBoolean(6, staff.isActive());
+            stmt.setInt(7, staff.getStaffId());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
 
         } catch (SQLException e) {
             throw new DatabaseException("Error updating staff: " + e.getMessage(), e);
+        }
+    }
+
+    public boolean updateStaffProfileImage(int staffId, String profileImagePath) throws DatabaseException {
+        String query = "UPDATE staff SET profile_image = ?, updated_at = NOW() WHERE staff_id = ?";
+
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, profileImagePath);
+            stmt.setInt(2, staffId);
+
+            int rowsAffected = stmt.executeUpdate();
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new DatabaseException("Error updating profile image: " + e.getMessage(), e);
         }
     }
 
@@ -118,6 +143,7 @@ public class StaffDAO {
         staff.setPassword(rs.getString("password"));
         staff.setFullName(rs.getString("full_name"));
         staff.setRole(rs.getString("role"));
+        staff.setProfileImage(rs.getString("profile_image"));
         staff.setActive(rs.getBoolean("is_active"));
         Timestamp createdTs = rs.getTimestamp("created_at");
         staff.setCreatedAt(createdTs != null ? createdTs.toLocalDateTime() : null);

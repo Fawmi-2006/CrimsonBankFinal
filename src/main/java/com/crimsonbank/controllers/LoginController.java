@@ -4,6 +4,8 @@ import com.crimsonbank.database.StaffDAO;
 import com.crimsonbank.database.AuditLogDAO;
 import com.crimsonbank.exceptions.DatabaseException;
 import com.crimsonbank.models.AuditLog;
+import com.crimsonbank.models.StaffMember;
+import com.crimsonbank.utils.SessionManager;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,6 +55,17 @@ public class LoginController {
             StaffDAO staffDAO = new StaffDAO();
 
             if (staffDAO.authenticate(username, password)) {
+                // Get the full staff member details and store in session
+                StaffMember staff = staffDAO.getByUsername(username);
+                if (staff != null) {
+                    SessionManager.getInstance().setCurrentUser(
+                        staff.getUsername(),
+                        staff.getFullName(),
+                        staff.getRole(),
+                        staff.getProfileImage()
+                    );
+                }
+
                 logLoginAttempt(username, true);
                 navigateToDashboard();
             } else {
@@ -82,36 +95,48 @@ public class LoginController {
 
     private void navigateToDashboard() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/crimsonbank/views/dashboard.fxml"));
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/crimsonbank/views/dashboard.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) loginButton.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/com/crimsonbank/styles.css").toExternalForm());
+
+            java.net.URL styleUrl = getClass().getResource("/com/crimsonbank/styles.css");
+            if (styleUrl != null) {
+                scene.getStylesheets().add(styleUrl.toExternalForm());
+            }
 
             stage.setScene(scene);
             stage.setTitle("CrimsonBank - Dashboard");
             stage.show();
 
         } catch (Exception e) {
+            e.printStackTrace();
             showError("Navigation error: " + e.getMessage());
         }
     }
 
     private void navigateToSignup() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/crimsonbank/views/signup.fxml"));
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/crimsonbank/views/signup.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) signupLink.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/com/crimsonbank/styles.css").toExternalForm());
+
+            java.net.URL styleUrl = getClass().getResource("/com/crimsonbank/styles.css");
+            if (styleUrl != null) {
+                scene.getStylesheets().add(styleUrl.toExternalForm());
+            }
 
             stage.setScene(scene);
             stage.setTitle("CrimsonBank - Sign Up");
             stage.show();
 
         } catch (Exception e) {
+            e.printStackTrace();
             showError("Navigation error: " + e.getMessage());
         }
     }

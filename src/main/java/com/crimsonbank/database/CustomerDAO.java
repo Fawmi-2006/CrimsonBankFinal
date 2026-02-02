@@ -17,7 +17,7 @@ public class CustomerDAO {
     }
 
     public int createCustomer(Customer customer) throws DatabaseException {
-        String query = "INSERT INTO customers (first_name, last_name, nic, email, phone_number, address, city, postal_code, date_of_birth) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO customers (first_name, last_name, nic, email, phone_number, address, city, postal_code, date_of_birth, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -31,6 +31,7 @@ public class CustomerDAO {
             stmt.setString(7, customer.getCity());
             stmt.setString(8, customer.getPostalCode());
             stmt.setDate(9, Date.valueOf(customer.getDateOfBirth()));
+            stmt.setString(10, customer.getProfileImage());
 
             stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
@@ -123,7 +124,7 @@ public class CustomerDAO {
     }
 
     public boolean updateCustomer(Customer customer) throws DatabaseException {
-        String query = "UPDATE customers SET first_name = ?, last_name = ?, email = ?, phone_number = ?, address = ?, city = ?, postal_code = ?, updated_at = NOW() WHERE customer_id = ?";
+        String query = "UPDATE customers SET first_name = ?, last_name = ?, email = ?, phone_number = ?, address = ?, city = ?, postal_code = ?, profile_image = ?, updated_at = NOW() WHERE customer_id = ?";
 
         try (Connection conn = dbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -135,7 +136,8 @@ public class CustomerDAO {
             stmt.setString(5, customer.getAddress());
             stmt.setString(6, customer.getCity());
             stmt.setString(7, customer.getPostalCode());
-            stmt.setInt(8, customer.getCustomerId());
+            stmt.setString(8, customer.getProfileImage());
+            stmt.setInt(9, customer.getCustomerId());
 
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
@@ -173,6 +175,7 @@ public class CustomerDAO {
         customer.setPostalCode(rs.getString("postal_code"));
         java.sql.Date dobDate = rs.getDate("date_of_birth");
         customer.setDateOfBirth(dobDate != null ? dobDate.toLocalDate() : null);
+        customer.setProfileImage(rs.getString("profile_image"));
         Timestamp createdTs = rs.getTimestamp("created_at");
         customer.setCreatedAt(createdTs != null ? createdTs.toLocalDateTime() : null);
         Timestamp updatedTs = rs.getTimestamp("updated_at");

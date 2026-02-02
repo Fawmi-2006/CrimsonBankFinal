@@ -4,7 +4,11 @@ import com.crimsonbank.database.CustomerDAO;
 import com.crimsonbank.database.AccountDAO;
 import com.crimsonbank.database.TransactionDAO;
 import com.crimsonbank.database.LoanDAO;
+import com.crimsonbank.database.StaffDAO;
 import com.crimsonbank.exceptions.DatabaseException;
+import com.crimsonbank.models.StaffMember;
+import com.crimsonbank.utils.AvatarUtil;
+import com.crimsonbank.utils.SessionManager;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
@@ -75,8 +80,18 @@ public class DashboardController {
     private Button quickNewTransactionButton;
 
     @FXML
+    private VBox userProfilePane;
+
+    @FXML
+    private Label userNameLabel;
+
+    @FXML
+    private Button profileButton;
+
+    @FXML
     public void initialize() {
         logoutButton.setOnAction(event -> handleLogout());
+        profileButton.setOnAction(event -> openProfileSettings());
         customerBtn.setOnAction(event -> navigateToPage("customer"));
         accountBtn.setOnAction(event -> navigateToPage("account"));
         transactionBtn.setOnAction(event -> navigateToPage("transaction"));
@@ -89,7 +104,21 @@ public class DashboardController {
         quickCreateAccountButton.setOnAction(event -> handleQuickCreateAccount());
         quickNewTransactionButton.setOnAction(event -> handleQuickNewTransaction());
 
+        loadUserProfile();
         loadDashboardData();
+    }
+
+    private void loadUserProfile() {
+        SessionManager session = SessionManager.getInstance();
+        String fullName = session.getCurrentUserFullName();
+        String profileImage = session.getCurrentUserProfileImage();
+
+        if (fullName != null && !fullName.isEmpty()) {
+            userNameLabel.setText(fullName);
+
+            // Add avatar to user profile pane
+            userProfilePane.getChildren().add(0, AvatarUtil.createAvatarWithImage(profileImage, fullName, 50));
+        }
     }
 
     private void loadDashboardData() {
@@ -133,37 +162,83 @@ public class DashboardController {
     private void navigateToPage(String page) {
         try {
             String fxmlFile = "/com/crimsonbank/views/" + page + ".fxml";
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource(fxmlFile));
             Parent root = loader.load();
 
             Stage stage = (Stage) customerBtn.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/com/crimsonbank/styles.css").toExternalForm());
+
+            java.net.URL styleUrl = getClass().getResource("/com/crimsonbank/styles.css");
+            if (styleUrl != null) {
+                scene.getStylesheets().add(styleUrl.toExternalForm());
+            }
 
             stage.setScene(scene);
             stage.setTitle("CrimsonBank - " + page.substring(0, 1).toUpperCase() + page.substring(1));
             stage.show();
 
         } catch (Exception e) {
+            e.printStackTrace();
             showError("Navigation error: " + e.getMessage());
         }
     }
 
     private void handleLogout() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/crimsonbank/views/login.fxml"));
+            // Clear session on logout
+            SessionManager.getInstance().clearSession();
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/crimsonbank/views/login.fxml"));
             Parent root = loader.load();
 
             Stage stage = (Stage) logoutButton.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/com/crimsonbank/styles.css").toExternalForm());
+
+            java.net.URL styleUrl = getClass().getResource("/com/crimsonbank/styles.css");
+            if (styleUrl != null) {
+                scene.getStylesheets().add(styleUrl.toExternalForm());
+            }
 
             stage.setScene(scene);
             stage.setTitle("CrimsonBank - Login");
             stage.show();
 
         } catch (Exception e) {
+            e.printStackTrace();
             showError("Logout error: " + e.getMessage());
+        }
+    }
+
+    private void openProfileSettings() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/com/crimsonbank/views/profile-settings.fxml"));
+            VBox root = loader.load();
+
+            ProfileSettingsController controller = loader.getController();
+
+            Stage stage = new Stage();
+            stage.setTitle("Profile Settings");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+
+            java.net.URL styleUrl = getClass().getResource("/com/crimsonbank/styles.css");
+            if (styleUrl != null) {
+                stage.getScene().getStylesheets().add(styleUrl.toExternalForm());
+            }
+
+            controller.setStage(stage);
+            stage.showAndWait();
+
+            // Refresh dashboard after settings close
+            refreshDashboard();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showError("Error opening profile settings: " + e.getMessage());
         }
     }
 

@@ -10,6 +10,7 @@ public class StaffMember {
     private String password;
     private String fullName;
     private String role;
+    private String profileImage;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isActive;
@@ -72,6 +73,14 @@ public class StaffMember {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 
     public LocalDateTime getCreatedAt() {

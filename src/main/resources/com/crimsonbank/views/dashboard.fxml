@@ -14,6 +14,18 @@
                 <Label text="CrimsonBank Dashboard"
                        style="-fx-font-size: 22; -fx-font-weight: 800; -fx-text-fill: white;"/>
                 <Region HBox.hgrow="ALWAYS"/>
+                <VBox fx:id="userProfilePane" spacing="8" alignment="CENTER_RIGHT" style="-fx-padding: 0 10 0 0; -fx-cursor: hand;">
+                    <Label fx:id="userNameLabel"
+                           text="User"
+                           style="-fx-font-size: 14; -fx-font-weight: 700; -fx-text-fill: white; -fx-alignment: CENTER_RIGHT; -fx-cursor: hand;"/>
+                </VBox>
+                <Button fx:id="profileButton"
+                        text="⚙️"
+                        style="-fx-font-size: 16; -fx-padding: 8px 12px; -fx-background-color: rgba(255,255,255,0.2); -fx-text-fill: white; -fx-border-color: white; -fx-border-width: 1; -fx-border-radius: 4;">
+                    <tooltip>
+                        <Tooltip text="Click to edit profile"/>
+                    </tooltip>
+                </Button>
                 <Button fx:id="logoutButton"
                         text="Logout"
                         styleClass="button-danger"
