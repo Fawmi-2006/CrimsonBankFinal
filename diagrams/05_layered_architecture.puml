@@ -1,0 +1,297 @@
+@startuml
+!define PRESENTATION_COLOR #E3F2FD
+!define BUSINESS_COLOR #FFF3E0
+!define DATA_COLOR #E8F5E9
+!define DATABASE_COLOR #F3E5F5
+
+title CrimsonBank - Layered Architecture Diagram
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+' External User
+actor "Bank Staff" as User
+
+' Presentation Layer
+package "Presentation Layer\n(JavaFX UI)" <<Rectangle>> PRESENTATION_COLOR {
+
+    package "FXML Views" {
+        component "login.fxml" as LoginView
+        component "dashboard.fxml" as DashboardView
+        component "customer.fxml" as CustomerView
+        component "account.fxml" as AccountView
+        component "transaction.fxml" as TransactionView
+        component "history.fxml" as HistoryView
+        component "loan.fxml" as LoanView
+        component "report.fxml" as ReportView
+        component "audit.fxml" as AuditView
+        component "signup.fxml" as SignupView
+        component "profile-settings.fxml" as ProfileView
+    }
+
+    package "Controllers" {
+        component "LoginController" as LoginCtrl
+        component "DashboardController" as DashboardCtrl
+        component "CustomerController" as CustomerCtrl
+        component "AccountController" as AccountCtrl
+        component "TransactionController" as TransactionCtrl
+        component "HistoryController" as HistoryCtrl
+        component "LoanController" as LoanCtrl
+        component "ReportController" as ReportCtrl
+        component "AuditController" as AuditCtrl
+        component "SignupController" as SignupCtrl
+        component "ProfileSettingsController" as ProfileCtrl
+    }
+
+    package "Utilities" {
+        component "NavigationUtil" as NavUtil
+        component "SessionManager" as Session
+        component "InputValidator" as Validator
+    }
+}
+
+' Business Logic Layer
+package "Business Logic Layer\n(Services & Patterns)" <<Rectangle>> BUSINESS_COLOR {
+
+    package "Services" {
+        component "TransactionService" as TxnService
+        component "CustomerService" as CustService
+        component "AccountService" as AccService
+        component "LoanService" as LoanService
+        component "ReportService" as ReportService
+    }
+
+    package "Design Patterns" {
+        component "AccountFactory\n(Factory Pattern)" as Factory
+        component "SavingsAccountFactory" as SavingsFactory
+        component "CurrentAccountFactory" as CurrentFactory
+        component "LoanApprovalQueue\n(FIFO)" as Queue
+        component "RecentActionsStack\n(LIFO)" as Stack
+    }
+
+    package "Algorithms" {
+        component "SortingAlgorithms" as Sorting
+        component "SearchingAlgorithms" as Searching
+    }
+
+    package "Models (Entities)" {
+        component "Customer" as CustomerModel
+        component "Account" as AccountModel
+        component "Transaction" as TransactionModel
+        component "Loan" as LoanModel
+        component "StaffMember" as StaffModel
+        component "AuditLog" as AuditModel
+    }
+
+    package "Exceptions" {
+        component "DatabaseException" as DBException
+        component "InsufficientFundsException" as FundsException
+        component "InvalidAccountException" as AccountException
+    }
+}
+
+' Data Access Layer
+package "Data Access Layer\n(DAOs & Connection)" <<Rectangle>> DATA_COLOR {
+
+    package "Data Access Objects" {
+        component "CustomerDAO" as CustomerDAO
+        component "AccountDAO" as AccountDAO
+        component "TransactionDAO" as TransactionDAO
+        component "LoanDAO" as LoanDAO
+        component "StaffDAO" as StaffDAO
+        component "AuditLogDAO" as AuditDAO
+    }
+
+    component "DatabaseConnection\n<<Singleton>>" as DBConn
+}
+
+' Database Layer
+database "Database Layer\n(MySQL)" <<Rectangle>> DATABASE_COLOR {
+
+    database "staff" as staff_table
+    database "customers" as customers_table
+    database "accounts" as accounts_table
+    database "transactions" as transactions_table
+    database "loans" as loans_table
+    database "audit_log" as audit_table
+}
+
+' User Interactions
+User --> LoginView : interacts with
+User --> DashboardView : interacts with
+User --> CustomerView : interacts with
+User --> TransactionView : interacts with
+
+' View to Controller bindings
+LoginView --> LoginCtrl : binds to
+DashboardView --> DashboardCtrl : binds to
+CustomerView --> CustomerCtrl : binds to
+AccountView --> AccountCtrl : binds to
+TransactionView --> TransactionCtrl : binds to
+HistoryView --> HistoryCtrl : binds to
+LoanView --> LoanCtrl : binds to
+ReportView --> ReportCtrl : binds to
+AuditView --> AuditCtrl : binds to
+SignupView --> SignupCtrl : binds to
+ProfileView --> ProfileCtrl : binds to
+
+' Controllers use Utilities
+LoginCtrl --> Session : uses
+LoginCtrl --> NavUtil : uses
+CustomerCtrl --> Validator : uses
+TransactionCtrl --> Validator : uses
+SignupCtrl --> Validator : uses
+
+' Controllers to Services
+TransactionCtrl --> TxnService : calls
+HistoryCtrl --> Sorting : uses
+ReportCtrl --> Sorting : uses
+ReportCtrl --> Searching : uses
+CustomerCtrl --> CustService : calls
+AccountCtrl --> AccService : calls
+LoanCtrl --> LoanService : calls
+ReportCtrl --> ReportService : calls
+
+' Services to Business Logic Components
+CustService --> CustomerModel : manages
+AccService --> AccountModel : manages
+AccService --> Factory : uses
+TxnService --> TransactionModel : creates
+TxnService --> FundsException : throws
+LoanService --> LoanModel : manages
+LoanService --> Queue : uses
+ReportService --> Sorting : uses
+ReportService --> Searching : uses
+
+' Controllers to DAOs
+LoginCtrl --> StaffDAO : calls
+DashboardCtrl --> CustomerDAO : calls
+DashboardCtrl --> AccountDAO : calls
+DashboardCtrl --> TransactionDAO : calls
+CustomerCtrl --> CustomerDAO : calls
+AccountCtrl --> AccountDAO : calls
+TransactionCtrl --> TransactionDAO : calls
+LoanCtrl --> LoanDAO : calls
+AuditCtrl --> AuditDAO : calls
+
+' Services to DAOs
+TxnService --> AccountDAO : uses
+TxnService --> TransactionDAO : uses
+TxnService --> AuditDAO : uses
+CustService --> CustomerDAO : uses
+AccService --> AccountDAO : uses
+LoanService --> LoanDAO : uses
+ReportService --> TransactionDAO : uses
+
+' Pattern implementations
+SavingsFactory --> Factory : implements
+CurrentFactory --> Factory : implements
+
+' DAOs to Database Connection
+CustomerDAO --> DBConn : uses
+AccountDAO --> DBConn : uses
+TransactionDAO --> DBConn : uses
+LoanDAO --> DBConn : uses
+StaffDAO --> DBConn : uses
+AuditDAO --> DBConn : uses
+
+' Database Connection to Database
+DBConn --> staff_table : connects to
+DBConn --> customers_table : connects to
+DBConn --> accounts_table : connects to
+DBConn --> transactions_table : connects to
+DBConn --> loans_table : connects to
+DBConn --> audit_table : connects to
+
+' Exception handling
+CustomerDAO ..> DBException : throws
+AccountDAO ..> DBException : throws
+TransactionDAO ..> DBException : throws
+LoanDAO ..> DBException : throws
+
+' Annotations
+note top of "Presentation Layer\n(JavaFX UI)"
+    **Presentation Layer**
+    - 11 FXML views (JavaFX)
+    - 11 Controllers
+    - User input validation
+    - Navigation management
+    - Session handling
+    - Professional CSS styling
+end note
+
+note top of "Business Logic Layer\n(Services & Patterns)"
+    **Business Logic Layer**
+    - Transaction processing logic
+    - Design patterns (Factory, Singleton)
+    - Data structures (Queue, Stack)
+    - Sorting/Searching algorithms
+    - Business rules enforcement
+    - Exception handling
+    - SOLID principles applied
+end note
+
+note top of "Data Access Layer\n(DAOs & Connection)"
+    **Data Access Layer**
+    - 6 DAO classes for CRUD operations
+    - Singleton DatabaseConnection
+    - SQL query execution
+    - ResultSet mapping
+    - Transaction management
+    - Prepared statements (SQL injection prevention)
+end note
+
+note top of "Database Layer\n(MySQL)"
+    **Database Layer**
+    - MySQL 8.x database
+    - 6 normalized tables
+    - Foreign key constraints
+    - Indexes for performance
+    - 500+ transaction records
+    - Audit trail storage
+end note
+
+note right of DBConn
+    <b>Singleton Pattern</b>\n
+    ensures single\n
+    database connection\n
+    instance across\n
+    the application
+end note
+
+note right of Queue
+    <b>FIFO behavior</b>\n
+    for fair loan approval\n
+    processing
+end note
+
+note right of Stack
+    <b>LIFO behavior</b>\n
+    for recent actions\n
+    audit history
+end note
+
+note right of Factory
+    <b>Factory Pattern</b>\n
+    creates different\n
+    account types\n
+    (Savings/Current)
+end note
+
+legend bottom right
+    **Design Patterns:**
+    • Singleton: DatabaseConnection, SessionManager
+    • Factory: Account creation (Savings/Current)
+    • DAO: Data access abstraction
+    • Strategy: Sorting algorithms
+
+    **SOLID Principles:**
+    • Single Responsibility: Each layer has one purpose
+    • Open/Closed: Factory allows extension
+    • Dependency Inversion: Controllers depend on abstractions
+
+    **Data Flow:**
+    User → View → Controller → Service/DAO → Database
+    Database → DAO → Service → Controller → View → User
+end legend
+
+@enduml

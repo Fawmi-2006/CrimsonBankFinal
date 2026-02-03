@@ -1,0 +1,163 @@
+@startuml CrimsonBank Sequence Diagram - Deposit Transaction
+!define ACTOR_COLOR #0055cc
+!define BOUNDARY_COLOR #E3F2FD
+!define CONTROL_COLOR #FFF3E0
+!define ENTITY_COLOR #F3E5F5
+!define DATABASE_COLOR #E8F5E9
+
+title CrimsonBank - Sequence Diagram: Process Deposit Transaction
+
+actor "Bank Staff" as Staff ACTOR_COLOR
+participant ":TransactionController" as Controller BOUNDARY_COLOR
+participant ":TransactionService" as Service CONTROL_COLOR
+participant ":AccountDAO" as AccountDAO ENTITY_COLOR
+participant ":TransactionDAO" as TransactionDAO ENTITY_COLOR
+participant ":AuditLogDAO" as AuditLogDAO ENTITY_COLOR
+participant ":DatabaseConnection" as DB DATABASE_COLOR
+database "MySQL Database" as Database DATABASE_COLOR
+
+activate Staff
+
+Staff -> Controller : handleDeposit()
+activate Controller
+
+Controller -> Controller : validateInput()
+note right
+  Validate account selection
+  and deposit amount
+end note
+
+alt Invalid Input
+    Controller -> Staff : showError("Invalid input")
+    deactivate Controller
+else Valid Input
+
+    Controller -> Service : deposit(accountId, amount, description, staffId)
+    activate Service
+
+    Service -> Service : validateAmount(amount)
+    note right
+      Check amount > 0
+    end note
+
+    alt Amount <= 0
+        Service -> Controller : throw InsufficientFundsException
+        Controller -> Staff : showError("Invalid amount")
+        deactivate Service
+        deactivate Controller
+    else Amount Valid
+
+        ' Get account details
+        Service -> AccountDAO : getById(accountId)
+        activate AccountDAO
+
+        AccountDAO -> DB : getConnection()
+        activate DB
+        DB --> AccountDAO : connection
+        deactivate DB
+
+        AccountDAO -> Database : SELECT * FROM accounts WHERE account_id = ?
+        activate Database
+        Database --> AccountDAO : ResultSet
+        deactivate Database
+
+        AccountDAO -> AccountDAO : mapResultSetToAccount(rs)
+        AccountDAO --> Service : account
+        deactivate AccountDAO
+
+        alt Account Not Found
+            Service -> Controller : throw DatabaseException("Account not found")
+            Controller -> Staff : showError("Account not found")
+            deactivate Service
+            deactivate Controller
+        else Account Found
+
+            ' Calculate new balance
+            Service -> Service : calculateNewBalance(oldBalance, amount)
+            note right
+              newBalance = oldBalance + amount
+            end note
+
+            ' Update account balance
+            Service -> AccountDAO : updateAccount(account)
+            activate AccountDAO
+
+            AccountDAO -> DB : getConnection()
+            activate DB
+            DB --> AccountDAO : connection
+            deactivate DB
+
+            AccountDAO -> Database : UPDATE accounts SET balance = ?, updated_at = NOW()
+            activate Database
+            Database --> AccountDAO : rows affected
+            deactivate Database
+
+            AccountDAO --> Service : true
+            deactivate AccountDAO
+
+            ' Create transaction record
+            Service -> Service : createTransaction(accountId, "DEPOSIT", amount, newBalance)
+
+            Service -> TransactionDAO : createTransaction(transaction)
+            activate TransactionDAO
+
+            TransactionDAO -> DB : getConnection()
+            activate DB
+            DB --> TransactionDAO : connection
+            deactivate DB
+
+            TransactionDAO -> Database : INSERT INTO transactions (...)
+            activate Database
+            Database --> TransactionDAO : transaction_id
+            deactivate Database
+
+            TransactionDAO --> Service : transactionId
+            deactivate TransactionDAO
+
+            ' Create audit log
+            Service -> Service : createAuditLog("DEPOSIT", description, staffId)
+
+            Service -> AuditLogDAO : createLog(auditLog)
+            activate AuditLogDAO
+
+            AuditLogDAO -> DB : getConnection()
+            activate DB
+            DB --> AuditLogDAO : connection
+            deactivate DB
+
+            AuditLogDAO -> Database : INSERT INTO audit_log (...)
+            activate Database
+            Database --> AuditLogDAO : log_id
+            deactivate Database
+
+            AuditLogDAO --> Service : logId
+            deactivate AuditLogDAO
+
+            Service --> Controller : success
+            deactivate Service
+
+            ' Refresh UI
+            Controller -> Controller : loadTransactions(accountId)
+
+            Controller -> TransactionDAO : getByAccountId(accountId)
+            activate TransactionDAO
+
+            TransactionDAO -> Database : SELECT * FROM transactions WHERE account_id = ?
+            activate Database
+            Database --> TransactionDAO : ResultSet
+            deactivate Database
+
+            TransactionDAO --> Controller : List<Transaction>
+            deactivate TransactionDAO
+
+            Controller -> Controller : updateTableView(transactions)
+
+            Controller -> Staff : showInfo("Deposit successful")
+            deactivate Controller
+        end
+    end
+end
+
+deactivate Staff
+
+@enduml

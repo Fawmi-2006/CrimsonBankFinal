@@ -1,0 +1,163 @@
+@startuml CrimsonBank Use Case Diagram
+!define RECTANGLE_COLOR #E3F2FD
+!define ACTOR_COLOR #0055cc
+
+title CrimsonBank - Use Case Diagram
+
+left to right direction
+
+' Actors
+actor "Bank Staff" as Staff <<Primary>>
+actor "Teller" as Teller <<Staff Role>>
+actor "Customer Service Officer" as CSO <<Staff Role>>
+actor "Supervisor" as Supervisor <<Manager Role>>
+actor "System Administrator" as Admin <<Admin Role>>
+
+' System Boundary
+rectangle "CrimsonBank System" RECTANGLE_COLOR {
+
+  ' Authentication Use Cases
+  package "Authentication" {
+    usecase (Login) as UC1
+    usecase (Logout) as UC2
+    usecase (Create Staff Account) as UC3
+    usecase (Manage Profile) as UC4
+  }
+
+  ' Customer Management Use Cases
+  package "Customer Management" {
+    usecase (Add Customer) as UC5
+    usecase (Edit Customer) as UC6
+    usecase (Delete Customer) as UC7
+    usecase (Search Customer) as UC8
+    usecase (View Customer Details) as UC9
+  }
+
+  ' Account Management Use Cases
+  package "Account Management" {
+    usecase (Create Account) as UC10
+    usecase (Update Account) as UC11
+    usecase (View Account Details) as UC12
+    usecase (Close Account) as UC13
+    usecase (Check Balance) as UC14
+  }
+
+  ' Transaction Processing Use Cases
+  package "Transaction Processing" {
+    usecase (Process Deposit) as UC15
+    usecase (Process Withdrawal) as UC16
+    usecase (Process Transfer) as UC17
+    usecase (View Transaction History) as UC18
+    usecase (Filter Transactions) as UC19
+    usecase (Sort Transactions) as UC20
+  }
+
+  ' Loan Management Use Cases
+  package "Loan Management" {
+    usecase (Submit Loan Request) as UC21
+    usecase (Approve Loan) as UC22
+    usecase (Reject Loan) as UC23
+    usecase (View Pending Loans) as UC24
+    usecase (View Approved Loans) as UC25
+  }
+
+  ' Reports & Analytics Use Cases
+  package "Reports & Analytics" {
+    usecase (Generate Transaction Report) as UC26
+    usecase (Generate Monthly Report) as UC27
+    usecase (Export to CSV) as UC28
+    usecase (View Analytics Charts) as UC29
+    usecase (View Dashboard Summary) as UC30
+  }
+
+  ' Audit & Logging Use Cases
+  package "Audit & Logging" {
+    usecase (View Audit Log) as UC31
+    usecase (Filter Audit Logs) as UC32
+    usecase (Track User Actions) as UC33
+  }
+}
+
+' Staff Relationships
+Staff --> UC1
+Staff --> UC2
+Staff --> UC4
+Staff --> UC5
+Staff --> UC6
+Staff --> UC8
+Staff --> UC9
+Staff --> UC10
+Staff --> UC12
+Staff --> UC14
+Staff --> UC15
+Staff --> UC16
+Staff --> UC17
+Staff --> UC18
+Staff --> UC19
+Staff --> UC20
+Staff --> UC30
+
+' Teller extends Staff
+Teller --|> Staff
+
+' Customer Service Officer extends Staff
+CSO --|> Staff
+CSO --> UC7
+CSO --> UC11
+CSO --> UC13
+CSO --> UC21
+CSO --> UC24
+
+' Supervisor extends Staff
+Supervisor --|> Staff
+Supervisor --> UC22
+Supervisor --> UC23
+Supervisor --> UC25
+Supervisor --> UC26
+Supervisor --> UC27
+Supervisor --> UC28
+Supervisor --> UC29
+Supervisor --> UC31
+Supervisor --> UC32
+
+' Admin extends Supervisor
+Admin --|> Supervisor
+Admin --> UC3
+Admin --> UC33
+
+' Include Relationships
+UC15 .> UC14 : <<include>>
+UC16 .> UC14 : <<include>>
+UC17 .> UC14 : <<include>>
+
+UC5 .> UC33 : <<include>>
+UC6 .> UC33 : <<include>>
+UC7 .> UC33 : <<include>>
+UC10 .> UC33 : <<include>>
+UC15 .> UC33 : <<include>>
+UC16 .> UC33 : <<include>>
+UC17 .> UC33 : <<include>>
+UC22 .> UC33 : <<include>>
+UC23 .> UC33 : <<include>>
+
+' Extend Relationships
+UC19 ..> UC18 : <<extend>>
+UC20 ..> UC18 : <<extend>>
+UC32 ..> UC31 : <<extend>>
+
+note right of UC16
+  Must check sufficient
+  balance before processing
+end note
+
+note right of UC22
+  Requires supervisor
+  authorization
+end note
+
+note bottom of UC18
+  Supports 500+ transaction
+  records with pagination
+end note
+
+@enduml

@@ -1,0 +1,447 @@
+@startuml CrimsonBank Class Diagram
+!define CLASS_COLOR #E3F2FD
+!define INTERFACE_COLOR #FFF3E0
+!define ABSTRACT_COLOR #F3E5F5
+
+title CrimsonBank - Class Diagram
+
+' Model Classes
+package "Models" CLASS_COLOR {
+
+  class Customer {
+    - customerId: int
+    - firstName: String
+    - lastName: String
+    - nic: String
+    - email: String
+    - phoneNumber: String
+    - address: String
+    - city: String
+    - postalCode: String
+    - dateOfBirth: LocalDate
+    - profileImage: String
+    - createdAt: LocalDateTime
+    - updatedAt: LocalDateTime
+    + Customer()
+    + Customer(firstName, lastName, nic, ...)
+    + getFullName(): String
+    + getCustomerId(): int
+    + setCustomerId(int): void
+    + getFirstName(): String
+    + setFirstName(String): void
+    + ... other getters/setters
+  }
+
+  class Account {
+    - accountId: int
+    - customerId: int
+    - accountNumber: String
+    - accountType: String
+    - balance: BigDecimal
+    - status: String
+    - createdAt: LocalDateTime
+    - updatedAt: LocalDateTime
+    + Account()
+    + Account(customerId, accountNumber, ...)
+    + isActive(): boolean
+    + getAccountId(): int
+    + setAccountId(int): void
+    + getBalance(): BigDecimal
+    + setBalance(BigDecimal): void
+    + ... other getters/setters
+  }
+
+  class Transaction {
+    - transactionId: int
+    - accountId: int
+    - transactionType: String
+    - amount: BigDecimal
+    - balanceAfter: BigDecimal
+    - description: String
+    - relatedAccountId: Integer
+    - createdAt: LocalDateTime
+    + Transaction()
+    + Transaction(accountId, type, amount, ...)
+    + getTransactionId(): int
+    + setTransactionId(int): void
+    + getAmount(): BigDecimal
+    + setAmount(BigDecimal): void
+    + ... other getters/setters
+  }
+
+  class Loan {
+    - loanId: int
+    - customerId: int
+    - loanAmount: BigDecimal
+    - interestRate: BigDecimal
+    - tenureMonths: int
+    - status: String
+    - approvedBy: Integer
+    - approvedDate: LocalDateTime
+    - createdAt: LocalDateTime
+    + Loan()
+    + Loan(customerId, amount, rate, ...)
+    + getLoanId(): int
+    + getStatus(): String
+    + setStatus(String): void
+    + ... other getters/setters
+  }
+
+  class StaffMember {
+    - staffId: int
+    - email: String
+    - username: String
+    - password: String
+    - fullName: String
+    - role: String
+    - profileImage: String
+    - isActive: boolean
+    - createdAt: LocalDateTime
+    - updatedAt: LocalDateTime
+    + StaffMember()
+    + StaffMember(email, username, password, ...)
+    + getStaffId(): int
+    + getUsername(): String
+    + setPassword(String): void
+    + ... other getters/setters
+  }
+
+  class AuditLog {
+    - logId: int
+    - action: String
+    - description: String
+    - staffId: Integer
+    - customerId: Integer
+    - accountId: Integer
+    - transactionId: Integer
+    - createdAt: LocalDateTime
+    + AuditLog()
+    + AuditLog(action, description, staffId)
+    + getLogId(): int
+    + getAction(): String
+    + ... other getters/setters
+  }
+
+  enum TransactionType {
+    DEPOSIT
+    WITHDRAWAL
+    TRANSFER
+    + getValue(): String
+    + fromValue(String): TransactionType
+  }
+}
+
+' Database Access Layer
+package "Database (DAO)" CLASS_COLOR {
+
+  class DatabaseConnection <<Singleton>> {
+    - {static} instance: DatabaseConnection
+    - connection: Connection
+    - {static} DB_URL: String
+    - {static} DB_USER: String
+    - {static} DB_PASSWORD: String
+    - DatabaseConnection()
+    + {static} getInstance(): DatabaseConnection
+    + getConnection(): Connection
+    + closeConnection(): void
+  }
+
+  class CustomerDAO {
+    - dbConnection: DatabaseConnection
+    + CustomerDAO()
+    + createCustomer(Customer): int
+    + getById(int): Customer
+    + getByNIC(String): Customer
+    + getAllCustomers(): List<Customer>
+    + searchByName(String): List<Customer>
+    + updateCustomer(Customer): boolean
+    + deleteCustomer(int): boolean
+    - mapResultSetToCustomer(ResultSet): Customer
+  }
+
+  class AccountDAO {
+    - dbConnection: DatabaseConnection
+    + AccountDAO()
+    + createAccount(Account): int
+    + getById(int): Account
+    + getByAccountNumber(String): Account
+    + getByCustomerId(int): List<Account>
+    + getAllAccounts(): List<Account>
+    + updateAccount(Account): boolean
+    + updateBalance(int, BigDecimal): boolean
+    + deleteAccount(int): boolean
+    - mapResultSetToAccount(ResultSet): Account
+  }
+
+  class TransactionDAO {
+    - dbConnection: DatabaseConnection
+    + TransactionDAO()
+    + createTransaction(Transaction): int
+    + getById(int): Transaction
+    + getByAccountId(int): List<Transaction>
+    + getAllTransactions(): List<Transaction>
+    + getTransactionCount(int): long
+    - mapResultSetToTransaction(ResultSet): Transaction
+  }
+
+  class LoanDAO {
+    - dbConnection: DatabaseConnection
+    + LoanDAO()
+    + createLoan(Loan): int
+    + getById(int): Loan
+    + getPendingLoans(): List<Loan>
+    + getApprovedLoans(): List<Loan>
+    + updateLoan(Loan): boolean
+    - mapResultSetToLoan(ResultSet): Loan
+  }
+
+  class StaffDAO {
+    - dbConnection: DatabaseConnection
+    + StaffDAO()
+    + authenticate(String, String): boolean
+    + getByUsername(String): StaffMember
+    + getById(int): StaffMember
+    + createStaff(StaffMember): boolean
+    + updateStaff(StaffMember): boolean
+    - mapResultSetToStaff(ResultSet): StaffMember
+  }
+
+  class AuditLogDAO {
+    - dbConnection: DatabaseConnection
+    + AuditLogDAO()
+    + createLog(AuditLog): int
+    + getAllLogs(): List<AuditLog>
+    + getLogsByAction(String): List<AuditLog>
+    - mapResultSetToLog(ResultSet): AuditLog
+  }
+}
+
+' Services Layer
+package "Services" CLASS_COLOR {
+
+  class TransactionService {
+    - accountDAO: AccountDAO
+    - transactionDAO: TransactionDAO
+    - auditLogDAO: AuditLogDAO
+    + TransactionService()
+    + deposit(int, BigDecimal, String, Integer): void
+    + withdraw(int, BigDecimal, String, Integer): void
+    + transfer(int, int, BigDecimal, Integer): void
+  }
+}
+
+' Design Patterns
+package "Patterns" INTERFACE_COLOR {
+
+  interface AccountFactory {
+    + createAccount(int, String, double): Account
+  }
+
+  class SavingsAccountFactory {
+    + createAccount(int, String, double): Account
+  }
+
+  class CurrentAccountFactory {
+    + createAccount(int, String, double): Account
+  }
+
+  class LoanApprovalQueue {
+    - queue: Queue<Integer>
+    + LoanApprovalQueue()
+    + enqueue(Integer): void
+    + dequeue(): Integer
+    + peek(): Integer
+    + isEmpty(): boolean
+    + size(): int
+  }
+
+  class RecentActionsStack {
+    - stack: Stack<AuditLog>
+    - {static} MAX_SIZE: int
+    + RecentActionsStack()
+    + push(AuditLog): void
+    + pop(): AuditLog
+    + peek(): AuditLog
+    + isEmpty(): boolean
+    + size(): int
+    + getAll(): List<AuditLog>
+  }
+}
+
+' Utilities
+package "Utils" CLASS_COLOR {
+
+  class InputValidator {
+    - {static} EMAIL_REGEX: String
+    - {static} NIC_REGEX: String
+    + {static} isValidEmail(String): boolean
+    + {static} isValidNIC(String): boolean
+    + {static} isValidPassword(String): boolean
+    + {static} isValidPhoneNumber(String): boolean
+    + {static} isValidAccountNumber(String): boolean
+    + {static} isPositiveAmount(double): boolean
+    + {static} sanitizeInput(String): String
+  }
+
+  class SortingAlgorithms {
+    + {static} quickSort(List<T>): void
+    + {static} mergeSort(List<T>, Comparator<T>): void
+    + {static} sortTransactionsByDateDescending(List<Transaction>): void
+    + {static} sortTransactionsByAmountAscending(List<Transaction>): void
+    + {static} sortAccountsByBalance(List<Account>): void
+  }
+
+  class SearchingAlgorithms {
+    + {static} binarySearch(List<T>, T): int
+    + {static} findAccountByNumber(List<Account>, String): Account
+    + {static} findAccountById(List<Account>, int): Account
+    + {static} searchAccountsByType(List<Account>, String): List<Account>
+  }
+
+  class SessionManager <<Singleton>> {
+    - {static} instance: SessionManager
+    - currentUsername: String
+    - currentFullName: String
+    - currentRole: String
+    - currentProfileImage: String
+    + {static} getInstance(): SessionManager
+    + setCurrentUser(String, String, String, String): void
+    + getCurrentUsername(): String
+    + clearSession(): void
+  }
+}
+
+' Exceptions
+package "Exceptions" ABSTRACT_COLOR {
+
+  class DatabaseException {
+    + DatabaseException(String)
+    + DatabaseException(String, Throwable)
+  }
+
+  class InsufficientFundsException {
+    + InsufficientFundsException(String)
+  }
+
+  class InvalidAccountException {
+    + InvalidAccountException(String)
+  }
+}
+
+' Controllers (simplified - showing key ones)
+package "Controllers" CLASS_COLOR {
+
+  class LoginController {
+    - usernameField: TextField
+    - passwordField: PasswordField
+    - handleLogin(): void
+    - navigateToDashboard(): void
+  }
+
+  class DashboardController {
+    - totalCustomersLabel: Label
+    - totalAccountsLabel: Label
+    - loadDashboardData(): void
+    - navigateToPage(String): void
+  }
+
+  class CustomerController {
+    - customerTable: TableView<Customer>
+    - customerDAO: CustomerDAO
+    - handleAdd(): void
+    - handleEdit(Customer): void
+    - handleDelete(Customer): void
+    - handleSearch(): void
+  }
+
+  class TransactionController {
+    - accountCombo: ComboBox<Account>
+    - transactionService: TransactionService
+    - handleDeposit(): void
+    - handleWithdraw(): void
+    - handleTransfer(): void
+  }
+}
+
+' Relationships
+
+' Model Relationships
+Customer "1" -- "*" Account : has
+Account "1" -- "*" Transaction : generates
+Customer "1" -- "*" Loan : applies for
+StaffMember "1" -- "*" AuditLog : creates
+Transaction ..> TransactionType : uses
+
+' DAO Dependencies
+CustomerDAO --> DatabaseConnection : uses
+AccountDAO --> DatabaseConnection : uses
+TransactionDAO --> DatabaseConnection : uses
+LoanDAO --> DatabaseConnection : uses
+StaffDAO --> DatabaseConnection : uses
+AuditLogDAO --> DatabaseConnection : uses
+
+CustomerDAO ..> Customer : manages
+AccountDAO ..> Account : manages
+TransactionDAO ..> Transaction : manages
+LoanDAO ..> Loan : manages
+StaffDAO ..> StaffMember : manages
+AuditLogDAO ..> AuditLog : manages
+
+' Service Dependencies
+TransactionService --> AccountDAO : uses
+TransactionService --> TransactionDAO : uses
+TransactionService --> AuditLogDAO : uses
+TransactionService ..> Account : operates on
+TransactionService ..> Transaction : creates
+
+' Pattern Implementations
+SavingsAccountFactory ..|> AccountFactory : implements
+CurrentAccountFactory ..|> AccountFactory : implements
+AccountFactory ..> Account : creates
+
+LoanApprovalQueue ..> Loan : queues
+RecentActionsStack ..> AuditLog : stacks
+
+' Controller Dependencies
+LoginController --> StaffDAO : uses
+DashboardController --> CustomerDAO : uses
+DashboardController --> AccountDAO : uses
+DashboardController --> TransactionDAO : uses
+CustomerController --> CustomerDAO : uses
+TransactionController --> TransactionService : uses
+TransactionController ..> InputValidator : validates
+
+' Exception Relationships
+DatabaseException --|> Exception
+InsufficientFundsException --|> Exception
+InvalidAccountException --|> Exception
+
+TransactionService ..> InsufficientFundsException : throws
+CustomerDAO ..> DatabaseException : throws
+AccountDAO ..> DatabaseException : throws
+
+note top of DatabaseConnection
+  Singleton Pattern
+  Ensures single database
+  connection instance
+end note
+
+note top of AccountFactory
+  Factory Pattern
+  Creates different account types
+  (Savings/Current)
+end note
+
+note right of SortingAlgorithms
+  Strategy Pattern
+  QuickSort O(n log n)
+  MergeSort O(n log n) stable
+end note
+
+note bottom of TransactionService
+  Service Layer
+  Encapsulates business logic
+  for transaction processing
+end note
+
+@enduml

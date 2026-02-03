@@ -1,0 +1,197 @@
+@startuml
+title BankCore Application - Activity Diagram
+start
+
+:Staff Member opens BankCore Application;
+
+if (User already logged in?) then (yes)
+  :Display Dashboard;
+else (no)
+  :Show Login Page;
+  :Enter Username/Email and Password;
+
+  if (Credentials valid?) then (yes)
+    :Authenticate User;
+    :Log Login Activity to Audit;
+    :Load User Permissions;
+    :Display Dashboard;
+  else (no)
+    :Show Error Message;
+    :Clear Password Field;
+    stop
+  endif
+endif
+
+partition "Dashboard Navigation" {
+  :User selects operation;
+
+  switch (Selected Operation)
+  case (Customer Management)
+    partition "Customer Management Flow" {
+      :Display Customer Management Page;
+
+      switch (Customer Action)
+      case (Add Customer)
+        :Show Add Customer Form;
+        :Validate Customer Data;
+        if (Data valid?) then (yes)
+          :Save Customer to Database;
+          :Log Activity to Audit;
+          :Show Success Message;
+          :Clear Form;
+        else (no)
+          :Show Validation Errors;
+        endif
+      case (Search Customer)
+        :Enter Search Criteria;
+        :Search in Database;
+        :Display Results in Table;
+        :Allow Selection for Edit/Delete;
+      case (Edit Customer)
+        :Load Selected Customer Data;
+        :Show Edit Form;
+        :Validate Updated Data;
+        if (Data valid?) then (yes)
+          :Update Customer in Database;
+          :Log Activity to Audit;
+          :Show Success Message;
+        else (no)
+          :Show Validation Errors;
+        endif
+      case (Delete Customer)
+        :Show Confirmation Dialog;
+        if (User confirms?) then (yes)
+          :Delete Customer from Database;
+          :Log Activity to Audit;
+          :Show Success Message;
+        else (no)
+          :Cancel Operation;
+        endif
+      endswitch
+    }
+
+  case (Account Management)
+    partition "Account Management Flow" {
+      :Display Account Management Page;
+
+      switch (Account Action)
+      case (Create Account)
+        :Select Customer;
+        :Choose Account Type;
+        :Generate Account Number;
+        :Set Initial Status;
+        :Save Account to Database;
+        :Log Activity to Audit;
+      case (View Accounts)
+        :Search Customer Accounts;
+        :Display Account List;
+        :Allow Status/Type Updates;
+      case (Update Account)
+        :Load Account Details;
+        :Make Changes;
+        :Validate Changes;
+        :Update Database;
+        :Log Activity to Audit;
+      endswitch
+    }
+
+  case (Transaction Processing)
+    partition "Transaction Processing Flow" {
+      :Display Transaction Page;
+
+      switch (Transaction Type)
+      case (Deposit)
+        :Select Target Account;
+        :Enter Deposit Amount;
+        if (Amount valid?) then (yes)
+          :Update Account Balance;
+          :Create Transaction Record;
+          :Log Activity to Audit;
+          :Generate Receipt;
+        else (no)
+          :Show Invalid Amount Error;
+        endif
+
+      case (Withdrawal)
+        :Select Source Account;
+        :Enter Withdrawal Amount;
+        if (Sufficient Balance?) then (yes)
+          :Update Account Balance;
+          :Create Transaction Record;
+          :Log Activity to Audit;
+          :Generate Receipt;
+        else (no)
+          :Show Insufficient Funds Error;
+        endif
+
+      case (Transfer)
+        :Select Source Account;
+        :Select Destination Account;
+        :Enter Transfer Amount;
+        if (Source has sufficient funds?) then (yes)
+          :Begin Database Transaction;
+          :Deduct from Source Account;
+          :Add to Destination Account;
+          :Create Two Transaction Records;
+          :Commit Transaction;
+          :Log Activity to Audit;
+          :Generate Receipt;
+        else (no)
+          :Show Insufficient Funds Error;
+          :Rollback if started;
+        endif
+      endswitch
+    }
+
+  case (Loan Processing)
+    partition "Loan Processing Flow" {
+      :Display Loan Management Page;
+
+      fork
+        :Staff creates new loan request;
+        :Validate loan details;
+        :Add to pending queue (FIFO);
+        :Log Activity to Audit;
+      fork again
+        :Supervisor views pending loans;
+        :Process loans in queue order;
+        :Approve/Reject with comments;
+        :Update loan status;
+        :Notify customer if approved;
+        :Log Decision to Audit;
+      endfork
+    }
+
+  case (Reports & Analytics)
+    partition "Reports Flow" {
+      :Display Reports Page;
+      :Select Report Type;
+      :Set Date Range/Filters;
+      :Process Large Dataset (500+ records);
+      :Generate Charts/Summaries;
+      :Option to Export to CSV;
+      :Display Results;
+    }
+
+  case (View Audit Log)
+    partition "Audit Log Flow" {
+      :Display Audit Log Page;
+      :Load Recent Activities (LIFO);
+      :Apply Filters if needed;
+      :Display Log Entries;
+    }
+  endswitch
+}
+
+:Return to Dashboard or;
+if (User chooses to logout?) then (yes)
+  :Log Logout Activity to Audit;
+  :Clear Session;
+  :Show Login Page;
+  stop
+else (no)
+  :Continue Operations;
+endif
+
+stop
+@enduml
