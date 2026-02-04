@@ -7,8 +7,8 @@
 
 <VBox spacing="20" alignment="CENTER" style="-fx-padding: 50px; -fx-background-color: linear-gradient(to bottom, #0f172a, #1e293b);" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" fx:controller="com.crimsonbank.controllers.LoginController">
-    <VBox spacing="20" alignment="CENTER" styleClass="card" style="-fx-padding: 40px; -fx-min-width: 380;">
-        <ImageView fx:id="logoImageView" fitWidth="260" preserveRatio="true" styleClass="login-logo" />
+    <VBox spacing="20" alignment="CENTER" styleClass="card" style="-fx-padding: 40px; -fx-min-width: 580;">
+        <ImageView fx:id="logoImageView" fitWidth="500" preserveRatio="true" styleClass="login-logo" />
 
         <Separator/>
 
