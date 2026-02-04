@@ -17,7 +17,12 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.InputStream;
 
 public class LoginController {
 
@@ -37,9 +42,31 @@ public class LoginController {
     private Hyperlink signupLink;
 
     @FXML
+    private ImageView logoImageView;
+
+    @FXML
     public void initialize() {
         loginButton.setOnAction(event -> handleLogin());
         signupLink.setOnAction(event -> navigateToSignup());
+
+        try {
+            InputStream is = getClass().getResourceAsStream("/com/crimsonbank/CimsonBank_Logo.png");
+            Image logo = null;
+            if (is != null) {
+                logo = new Image(is);
+            } else {
+                File f = new File("C:\\Users\\SINGER\\Desktop\\CrimsonBankFinal\\CimsonBank_Logo.png");
+                if (f.exists()) {
+                    logo = new Image(f.toURI().toString());
+                }
+            }
+
+            if (logo != null && logoImageView != null) {
+                logoImageView.setImage(logo);
+            }
+        } catch (Exception e) {
+            System.err.println("Unable to load logo: " + e.getMessage());
+        }
     }
 
     private void handleLogin() {

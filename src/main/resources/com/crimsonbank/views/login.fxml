@@ -2,13 +2,13 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
 <VBox spacing="20" alignment="CENTER" style="-fx-padding: 50px; -fx-background-color: linear-gradient(to bottom, #0f172a, #1e293b);" xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml" fx:controller="com.crimsonbank.controllers.LoginController">
     <VBox spacing="20" alignment="CENTER" styleClass="card" style="-fx-padding: 40px; -fx-min-width: 380;">
-        <Label text="CrimsonBank" styleClass="label-heading" style="-fx-font-size: 36; -fx-text-fill: #0055cc;"/>
-        <Label text="Banking Management System" styleClass="label-small" style="-fx-text-fill: #64748b;"/>
+        <ImageView fx:id="logoImageView" fitWidth="260" preserveRatio="true" styleClass="login-logo" />
 
         <Separator/>
 

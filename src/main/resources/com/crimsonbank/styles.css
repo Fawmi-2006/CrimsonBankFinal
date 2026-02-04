@@ -393,3 +393,8 @@
 .progress-indicator {
     -fx-progress-color: #0066ee;
 }
+
+.login-logo {
+    -fx-padding: 0 0 10px 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 6, 0, 0, 2);
+}
