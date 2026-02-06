@@ -8,11 +8,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-/**
- * Utility class for creating and managing user avatars.
- * Supports displaying profile images or generating circular avatars
- * with the first letter of a user's name.
- */
 public class AvatarUtil {
 
     private static final int DEFAULT_AVATAR_SIZE = 40;
@@ -27,14 +22,6 @@ public class AvatarUtil {
             0xF97316
     };
 
-    /**
-     * Creates a circular avatar with the first letter of a name.
-     * The background color is deterministically chosen based on the name.
-     *
-     * @param name the user's full name or display name
-     * @param size the size of the avatar in pixels
-     * @return a StackPane containing the circular avatar
-     */
     public static StackPane createAvatarWithName(String name, int size) {
         if (name == null || name.isEmpty()) {
             name = "U";
@@ -69,25 +56,10 @@ public class AvatarUtil {
         return avatar;
     }
 
-    /**
-     * Creates a circular avatar with the default size.
-     *
-     * @param name the user's full name or display name
-     * @return a StackPane containing the circular avatar
-     */
     public static StackPane createAvatarWithName(String name) {
         return createAvatarWithName(name, DEFAULT_AVATAR_SIZE);
     }
 
-    /**
-     * Creates an avatar that displays a profile image if available,
-     * otherwise falls back to a letter-based avatar.
-     *
-     * @param imagePath the path to the profile image file
-     * @param name the user's full name (for fallback avatar)
-     * @param size the size of the avatar in pixels
-     * @return a StackPane containing either the image or the letter avatar
-     */
     public static StackPane createAvatarWithImage(String imagePath, String name, int size) {
         String resolvedPath = normalizeImagePath(imagePath);
         if (resolvedPath != null) {
@@ -143,13 +115,6 @@ public class AvatarUtil {
         return null;
     }
 
-    /**
-     * Creates an avatar with the default size that displays a profile image if available.
-     *
-     * @param imagePath the path to the profile image file
-     * @param name the user's full name (for fallback avatar)
-     * @return a StackPane containing either the image or the letter avatar
-     */
     public static StackPane createAvatarWithImage(String imagePath, String name) {
         return createAvatarWithImage(imagePath, name, DEFAULT_AVATAR_SIZE);
     }

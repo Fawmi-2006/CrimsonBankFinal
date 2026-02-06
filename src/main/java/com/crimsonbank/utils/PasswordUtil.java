@@ -7,25 +7,12 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
-/**
- * Utility class for secure password handling using PBKDF2 hashing.
- * This class provides methods for hashing passwords and verifying them
- * against stored hashes. Uses Java's built-in PBKDF2 algorithm.
- */
 public class PasswordUtil {
 
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA256";
 
-    /**
-     * Hashes a plain-text password using PBKDF2.
-     * Uses 10000 iterations for good balance between security and performance.
-     *
-     * @param plainPassword the plain-text password to hash
-     * @return the hashed password with salt (format: salt:hash)
-     * @throws IllegalArgumentException if password is null or empty
-     */
     public static String hashPassword(String plainPassword) {
         if (plainPassword == null || plainPassword.isEmpty()) {
             throw new IllegalArgumentException("Password cannot be null or empty");
@@ -50,14 +37,6 @@ public class PasswordUtil {
         }
     }
 
-    /**
-     * Verifies a plain-text password against a PBKDF2 hash.
-     *
-     * @param plainPassword the plain-text password to check
-     * @param hashedPassword the hashed password (format: salt:hash)
-     * @return true if the password matches the hash, false otherwise
-     * @throws IllegalArgumentException if either parameter is null or empty
-     */
     public static boolean verifyPassword(String plainPassword, String hashedPassword) {
         if (plainPassword == null || plainPassword.isEmpty()) {
             throw new IllegalArgumentException("Plain password cannot be null or empty");
@@ -86,13 +65,6 @@ public class PasswordUtil {
         }
     }
 
-    /**
-     * Constant-time comparison to prevent timing attacks.
-     *
-     * @param a first byte array
-     * @param b second byte array
-     * @return true if arrays are equal, false otherwise
-     */
     private static boolean constantTimeEquals(byte[] a, byte[] b) {
         if (a.length != b.length) {
             return false;
