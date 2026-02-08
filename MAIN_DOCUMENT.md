@@ -255,9 +255,39 @@ Test plan includes test ID, objective, preconditions, steps, expected results, a
 - SOLID improves change safety: new features can be added without modifying core classes.
 - Trade-offs include more interfaces and files, but the modularity benefits outweigh overhead.
 
-Before vs after example:
-Before (tightly coupled): UI controller directly executes SQL and validates inputs.
-After (SOLID-friendly): UI calls service -> service validates -> DAO handles SQL, allowing isolated changes and testing.
+Before vs after example (detailed):
+
+Checklist (what follows is included):
+- Goal: show a compact "before" (tightly-coupled) and "after" (SOLID-friendly) pseudocode example.
+- Scope: account creation flow (UI validation + persistence) in Java-like pseudocode.
+- Success: each snippet ≤10 lines and includes short SOLID mapping comments.
+
+Before (tightly-coupled, violates SOLID) — 7 lines
+```pseudo
+void handleCreateAccount() {
+    String name = txtName.getText(); String bal = txtBalance.getText();
+    if (name.isEmpty() || Double.parseDouble(bal) < 0) { showAlert("Invalid"); return; }
+    String sql = "INSERT INTO accounts(name,balance) VALUES('" + name + "'," + bal + ")";
+    Connection conn = new SqlConnection("jdbc:..."); conn.execute(sql);
+    showAlert("Account created");
+}
+```
+- SOLID impact: Violates Single Responsibility (UI + validation + persistence mixed) and Dependency Inversion (depends on concrete SQL/Connection); also hurts Open/Closed (changing persistence forces edits here).
+
+After (SOLID-friendly, responsibilities separated) — 8 lines
+```pseudo
+class AccountController { AccountService svc; void onCreate() { svc.create(new AccountDTO(name, balance)); } }
+interface AccountService { void create(AccountDTO dto); }
+class AccountServiceImpl implements AccountService {
+    Validator<AccountDTO> v; AccountDao dao;
+    void create(AccountDTO dto) { v.validate(dto); Account a = dto.toModel(); dao.save(a); }
+}
+// Controller constructed with AccountServiceImpl which is injected with Validator and AccountDao abstractions
+```
+- SOLID impact: Respects Single Responsibility (UI, validation, business logic, persistence separated), Dependency Inversion (high-level modules depend on interfaces), Open/Closed (new Dao/Validator implementations can be added without changing controller/service), and Interface Segregation (focused interfaces).
+
+Before vs after summary:
+- The "before" snippet shows tight coupling and mixed concerns; the "after" snippet demonstrates clear separation: UI → Service → Validator → DAO, improving maintainability and testability.
 
 ## Part 3 — Build the application
 
