@@ -36,7 +36,7 @@ CrimsonBankFinal/
 │           ├── models/ (Unit tests)
 │           ├── utils/ (Algorithm tests)
 │           └── patterns/ (Data structure tests)
-├── database-scripts/ (7 SQL scripts)
+├── database-scripts/ (11 SQL scripts)
 └── pom.xml
 ```
 
@@ -57,8 +57,11 @@ CrimsonBankFinal/
      4. `04_create_transactions.sql`
      5. `05_create_loans.sql`
      6. `06_create_audit_log.sql`
-     7. `08_insert_staff_accounts.sql`
-     8. `07_insert_sample_data.sql` (500+ transactions)
+     7. `07_insert_sample_data.sql` (contains sample data; includes 500+ transactions)
+     8. `08_insert_staff_accounts.sql` (contains default staff accounts)
+     9. `09_add_profile_images.sql`
+    10. `10_migration_existing_passwords.sql`
+    11. `11_insert_loan_data.sql`
 
 2. **Database Credentials** (in DatabaseConnection.java):
    ```
@@ -253,7 +256,10 @@ database-scripts/
 ├── 05_create_loans.sql
 ├── 06_create_audit_log.sql
 ├── 07_insert_sample_data.sql
-└── 08_insert_staff_accounts.sql
+├── 08_insert_staff_accounts.sql
+├── 09_add_profile_images.sql
+├── 10_migration_existing_passwords.sql
+└── 11_insert_loan_data.sql
 ```
 
 ## Troubleshooting
@@ -304,4 +310,4 @@ For issues or questions, review:
 
 **Version**: 1.0-SNAPSHOT  
 **Java Version**: 21  
-**Last Updated**: January 2026
+**Last Updated**: February 8, 2026
